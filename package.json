@@ -1,0 +1,26 @@
+{
+  "name": "react-component-generator",
+  "version": "1.0.0",
+  "description": "CLI Tools that generates a full folder structure for your react project",
+  "main": "react-component.js.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "react-comp": "react-component.js",
+    "react-config": "react-config.js"
+  },
+  "keywords": [
+    "react",
+    "react js",
+    "react ts",
+    "css",
+    "scss",
+    "sass"
+  ],
+  "author": "Riahi Mohamed Yassin",
+  "license": "ISC",
+  "dependencies": {
+    "yargs": "^17.7.2"
+  }
+}
