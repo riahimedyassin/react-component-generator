@@ -1,6 +1,6 @@
 {
   "name": "rcg-cli-tool",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "CLI Tools that generates a full folder structure for your react project",
   "main": "react-component.js.js",
   "scripts": {

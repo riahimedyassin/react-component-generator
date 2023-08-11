@@ -22,7 +22,7 @@ const UpperCase = require("./utils/UppedCase")
 const createFile = require("./utils/createFile");
 const checkTemplate = require("./utils/checkTemplate");
 const generator = JSON.parse(fs.readFileSync("./generator.config.json", { encoding: "utf-8" }).toString())
-const {scriptPossible,stylePossible,componentPossible}= require("./utils/constants")
+const { scriptPossible, stylePossible, componentPossible } = require("./utils/constants")
 let hasError = false
 const setHasError = (bool) => {
     hasError = bool
@@ -30,19 +30,19 @@ const setHasError = (bool) => {
 
 
 
-
 //Initial Values from the generator
-if(!generator) throw new Error("Please head to the initiale folder to where the generator.config.json file is located")
+if (!generator) return console.log("Please head to the initiale folder to where the generator.config.json file is located")
 const { style, template, type, dist } = generator
 
 
 
 
 
-if (!argv.name) throw new Error("All fields are mandatory")
+if (!argv.name) return console.log("All fields are mandatory")
 
 //Where the folder will be created
 const destinationFile = argv.folder || dist
+
 
 //The created Folder path and name
 const folderPath = `./src/${destinationFile}`;
@@ -68,13 +68,13 @@ if (hasError) throw new Error("Cannot Procceed ! Error Occured")
 
 
 const ScriptTemplate = argv.template || template
-if (!checkTemplate(ScriptTemplate,scriptPossible)) throw new Error("Template must be : typescript or javascript")
+if (!checkTemplate(ScriptTemplate, scriptPossible)) throw new Error("Template must be : typescript or javascript")
 const mainExtension = ScriptTemplate === "typescript" ? "tsx" : "jsx"
 const main = path.join(finalPath, `${UpperCased}.${mainExtension}`)
 
 
 const styleType = argv.style || style
-if (!checkTemplate(styleType,stylePossible)) throw new Error(`${styleType}Is not a valid style type [css,scss,sass]`)
+if (!checkTemplate(styleType, stylePossible)) throw new Error(`${styleType}Is not a valid style type [css,scss,sass]`)
 const stylePath = path.join(finalPath, `${UpperCased}.${styleType}`)
 
 
@@ -84,7 +84,7 @@ if (hasError) throw new Error("Problem Occurred")
 
 //Main File Template 
 const fileTemplate = argv.type || type
-if (!checkTemplate(fileTemplate,componentPossible)) throw new Error("File Template : class : Class Component || function : Functionnal Component")
+if (!checkTemplate(fileTemplate, componentPossible)) throw new Error("File Template : class : Class Component || function : Functionnal Component")
 //Choose the template according to 
 let toModifyTemplate
 fileTemplate === "function" ?
@@ -96,7 +96,7 @@ fileTemplate === "function" ?
 const finalTemplate = toModifyTemplate.replaceAll("rfce", UpperCased).replaceAll("rce", UpperCased)
 //Create and write to the file the template
 fs.writeFile(main, finalTemplate, (err) => {
-    if (err) console.log(err)
+    if (err) throw new Error(err)
 })
 //Create the style file 
 const styleFile = createFile(stylePath, styleType)
