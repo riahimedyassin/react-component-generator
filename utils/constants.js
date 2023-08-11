@@ -8,6 +8,6 @@
 
 const scriptPossible= ["javascript","typescript"]
 const stylePossible=["css","scss","sass"]
-const componentPossible = ["c", "f"]
+const componentPossible = ["class", "function"]
 
 module.exports={scriptPossible,stylePossible,componentPossible}

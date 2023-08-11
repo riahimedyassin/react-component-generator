@@ -33,7 +33,7 @@ const setHasError = (bool) => {
 
 //Initial Values from the generator
 if(!generator) throw new Error("Please head to the initiale folder to where the generator.config.json file is located")
-const { style, template, c, dist } = generator
+const { style, template, type, dist } = generator
 
 
 
@@ -83,11 +83,11 @@ if (hasError) throw new Error("Problem Occurred")
 
 
 //Main File Template 
-const fileTemplate = argv.c || c
-if (!checkTemplate(fileTemplate,componentPossible)) throw new Error("File Template : c : Class Component || f : Functionnal Component")
+const fileTemplate = argv.type || type
+if (!checkTemplate(fileTemplate,componentPossible)) throw new Error("File Template : class : Class Component || function : Functionnal Component")
 //Choose the template according to 
 let toModifyTemplate
-fileTemplate === "f" ?
+fileTemplate === "function" ?
     toModifyTemplate = fs.readFileSync(__dirname + '/template/rfce.js').toString()
     :
     toModifyTemplate = fs.readFileSync(__dirname + '/template/rce.js').toString()
