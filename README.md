@@ -6,12 +6,12 @@
 1. For Development Purposes.
 ###### This CLI Tool should be better installed globally, so you could simply access the command line quickly.
 ```
-npm install react-component-generator --save-dev -g
+npm i --save-dev rcg-cli-tool 
 ```
 2. General Purposes
 ###### This CLI Tool should be better installed globally, so you could simply access the command line quickly.
 ```
-npm install react-component-generator -g
+npm i -g rcg-cli-tool 
 ```
 * ## Config File
   The **Config File** under the name of *generator.config.json* is an important file to set up your custom file generator.
