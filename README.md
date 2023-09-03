@@ -6,13 +6,12 @@
 1. For Development Purposes.
 ###### This CLI Tool should be better installed globally, so you could simply access the command line quickly.
 ```
-npm install rcg-cli-tool --save-dev -g
+
 ```
 2. General Purposes
 ###### This CLI Tool should be better installed globally, so you could simply access the command line quickly.
 ```
-npm install rcg-cli-tool -g
-```
+
 * ## Config File
   The **Config File** under the name of *generator.config.json* is an important file to set up your custom file generator.
   * ### Initialize the config file :
