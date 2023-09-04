@@ -3,12 +3,6 @@
 
 
 * ## Install 
-1. For Development Purposes.
-###### This CLI Tool should be better installed globally, so you could simply access the command line quickly.
-```
-npm install rcg-cli-tool --save-dev -g
-```
-2. General Purposes
 ###### This CLI Tool should be better installed globally, so you could simply access the command line quickly.
 ```
 npm install rcg-cli-tool -g
