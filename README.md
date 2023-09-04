@@ -1,5 +1,5 @@
 # React Component Generator
-**React Component Generator** is a CLI to initialize the full folder structure for your React Project Component.
+**React Component Generator** is a CLI to generate Components for your React Project.
 
 
 * ## Install 
@@ -114,11 +114,11 @@ You can specify the **Name of Component** and generated file type directly from 
 
 2. Test Files 
    From now on , you can get rid of the Test files without having to delete them manually everytime.
-   You can specify the **test** field in the **generator.config** file to false you'll not get any testing files anymore.
+   You can specify the **test** field in the **generator.config.json** file to false you'll not get any testing files anymore.
 
    ```json
       {
-         ...generator,
+         "...options":"...values",
          "test":false
       }
 
