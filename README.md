@@ -87,13 +87,13 @@ You can specify the **Name of Component** and generated file type directly from 
    ---
    ### Example 1:
    ```
-   react ExampleComponent
+   rg ExampleComponent
    ```
    **Result** : ExampleComponent
    ---
     ### Example 2:
    ```
-   react example-component
+   rg example-component
    ```
    **Result** : Example-component
    
@@ -101,7 +101,7 @@ You can specify the **Name of Component** and generated file type directly from 
 2. Component Proprieties :
    To set up a custom component dynamically separately from the **generator.config.json** setting , you could do that simply by setting up the field name and the value for it.
    ```
-   react FolderName -template (-ts || -js) -style (-css || -scss || -sass)
+   rg FolderName -template (-ts || -js) -style (-css || -scss || -sass)
    ```
     ## Properties :
      
@@ -143,7 +143,7 @@ This Approach wasn't really fast enough and it any typing error may cause you an
 
 ### Latest Version : 
 ```
-react FolderName -ts -scss
+rg FolderName -ts -scss
 ```
 This approach is very efficient in terms of time saving.
 It is more of inspiration from the **ng** command line tool from Angular .

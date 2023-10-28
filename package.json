@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "react": "Main.js",
+    "rg": "Main.js",
     "react-config": "Init.js"
   },
   "keywords": [
