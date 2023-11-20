@@ -24,11 +24,15 @@ const FileManager = require("./Manager/FileManager")
 const ExtensionManager = require("./Manager/ExtensionManager")
 const { scriptPossible, stylePossible, componentPossible } = require("./utils/constants")
 const Init = require("./Init")
-const generator = JSON.parse(fs.readFileSync("./generator.config.json", { encoding: "utf-8" }).toString())
+let configFile = fs.readFileSync("./generator.config.json", { encoding: "utf-8" }).toString()
+let generator ;
+if(!configFile)  {
+    const init = new Init()
+    init.run()
+}
+configFile = fs.readFileSync("./generator.config.json", { encoding: "utf-8" }).toString()
+generator=JSON.parse(configFile)
 
-const init = new Init()
-
-if (!generator) init.run()
 const { style, template, type, dist, test } = generator
 
 class Main {

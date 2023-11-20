@@ -60,6 +60,7 @@ This config file will generate for you a file under the **components** folder. T
 |  Style   |  -css   | .css file  |
 |          |  -scss  | .scss file |
 |          |  -sass  | .sass file |
+|          |  -less  | .less file |
 
 * Component :
   
@@ -96,7 +97,7 @@ You can specify the **Name of Component** and generated file type directly from 
 2. Component Proprieties :
    To set up a custom component dynamically separately from the **generator.config.json** setting , you could do that simply by setting up the field name and the value for it.
    ```
-   react FolderName -template (-ts || -js) -style (-css || -scss || -sass)
+   react FolderName -template (-ts || -js) -style (-css || -scss || -sass || -less)
    ```
     ## Properties :
      
@@ -125,20 +126,21 @@ You can specify the **Name of Component** and generated file type directly from 
    ```
 
 ---
-## V 2.0.0 
+## V 2.1.0 
 This version is still under development . It may hold multiple bugs , I'll be working on improving it . 
 
-I had recently made a significant changes in the excution flow of this CLI tool , where you don't have to specify the fields names explicitly in the Command Line anymore :
+I had recently changed to CLI global command to **rg** instead of react.
+I had also added Less as a style sheet option.
 
 ### Previous Version : 
 ```
-react-comp --name="FolderName" --style="css" --template="typescript"
+react FolderName -ts -scss
 ```
 This Approach wasn't really fast enough and it any typing error may cause you an unexcpeted error behaviour 
 
 ### Latest Version : 
 ```
-react FolderName -ts -scss
+rg FolderName -ts -scss
 ```
 This approach is very efficient in terms of time saving.
 It is more of inspiration from the **ng** command line tool from Angular .
