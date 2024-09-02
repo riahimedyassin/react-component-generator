@@ -1,0 +1,6 @@
+{
+  "template": "-js",
+  "style": "-scss",
+  "dist": "components",
+  "type": "function"
+}
