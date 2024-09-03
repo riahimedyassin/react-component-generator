@@ -8,8 +8,7 @@
     "build": "tsc & npx tsc-alias"
   },
   "bin": {
-    "react": "dist/index.ts",
-    "react-config": "Init.js"
+    "react": "dist/index.js"
   },
   "keywords": [
     "react",

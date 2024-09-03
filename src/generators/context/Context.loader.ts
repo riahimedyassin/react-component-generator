@@ -13,6 +13,7 @@ export class ContextLoader {
       style: config.style,
       template: config.template,
       type: config.type,
+      test_extension: "js",
     };
   }
   public async load() {
@@ -33,10 +34,15 @@ export class ContextLoader {
       }
       if (value == "test") {
         ContextLoader.context.test = true;
+        ContextLoader.context.test_extension =
+          ContextLoader.context.template == Template.JAVASCRIPT
+            ? "spec.js"
+            : "spec.ts";
         continue;
       }
       const paths = value.split("/");
-      ContextLoader.context.name = paths[paths.length - 1];
+      const name = paths[paths.length - 1];
+      ContextLoader.context.name = `${name[0]}${name.substring(1)}`;
       if (paths.length > 1) {
         ContextLoader.context.dist = paths.slice(0, paths.length - 1).join("/");
       }

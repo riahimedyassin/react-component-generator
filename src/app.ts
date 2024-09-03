@@ -11,6 +11,5 @@ export class Application {
   async run() {
     await this.configGenerator.generate();
     await this.contextLoader.load();
-    console.log(ContextLoader.context);
   }
 }
