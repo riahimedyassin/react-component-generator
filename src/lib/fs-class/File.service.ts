@@ -18,11 +18,11 @@ export class FileService {
       .then(async (data) => {
         return this.create(dist, name, data)
           .then((response) => response)
-          .catch((err) => {
+          .catch((_) => {
             return false;
           });
       })
-      .catch((err) => {
+      .catch((_) => {
         return false;
       });
   }

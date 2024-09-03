@@ -4,7 +4,8 @@
   "description": "CLI Tools that generates a full folder structure for your react project",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc & npx tsc-alias"
   },
   "bin": {
     "react": "dist/index.ts",

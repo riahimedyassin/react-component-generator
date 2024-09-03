@@ -1,5 +1,16 @@
-export class Application {
-  constructor(private readonly packagePath: string) {}
+import { ConfigGenerator, ContextLoader } from "@generators";
 
-  async run() {}
+export class Application {
+  private readonly contextLoader: ContextLoader;
+  private readonly configGenerator: ConfigGenerator;
+  constructor() {
+    this.contextLoader = new ContextLoader();
+    this.configGenerator = ConfigGenerator.getInstance();
+  }
+
+  async run() {
+    await this.configGenerator.generate();
+    await this.contextLoader.load();
+    console.log(ContextLoader.context);
+  }
 }
