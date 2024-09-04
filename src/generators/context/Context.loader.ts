@@ -13,7 +13,7 @@ export class ContextLoader {
       style: config.style,
       template: config.template,
       type: config.type,
-      test_extension: "js",
+      test_extension: "spec.js",
     };
   }
   public async load() {
