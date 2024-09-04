@@ -42,9 +42,13 @@ export class ContextLoader {
       }
       const paths = value.split("/");
       const name = paths[paths.length - 1];
-      ContextLoader.context.name = `${name[0]}${name.substring(1)}`;
+      ContextLoader.context.name = `${name[0].toUpperCase()}${name.substring(
+        1
+      )}`;
       if (paths.length > 1) {
-        ContextLoader.context.dist = paths.slice(0, paths.length - 1).join("/");
+        ContextLoader.context.dist = paths
+          .slice(0, paths.length - 1)
+          .join("\\");
       }
     }
   }

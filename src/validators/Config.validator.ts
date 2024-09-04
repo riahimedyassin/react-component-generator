@@ -9,6 +9,12 @@ export class ConfigValidator implements ValidatorInterface {
     return this;
   }
   public validate(): void {
+    const VALID_KEYS = new Set(["template", "style", "type", "dist", "test"]);
+    const keys = Object.keys(this.config);
+    for (const key of keys) {
+      if (!VALID_KEYS.has(key))
+        throw new InvalidConfigException("keys", VALID_KEYS);
+    }
     if (!this.config) {
       throw new NullValueException("config");
     }

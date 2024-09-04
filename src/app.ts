@@ -2,6 +2,7 @@ import { ConfigGenerator, ContextLoader } from "@generators";
 import { ContextValidator } from "./validators/Context.validator";
 import { ConfigValidator } from "./validators/Config.validator";
 import { ComponentGenerator } from "./generators/components/Components.generator";
+import { InvalidConfigException, NullValueException } from "@errors";
 
 export class Application {
   private readonly contextLoader: ContextLoader;
@@ -21,10 +22,22 @@ export class Application {
   }
 
   async run() {
-    await this.configGenerator.generate();
-    await this.contextLoader.load();
-    this.configValidator.setConfig(ConfigGenerator.Config).validate();
-    this.contextValidator.setContext(ContextLoader.context).validate();
-    this.getComponentGenerator().generate();
+    try {
+      await this.configGenerator.generate();
+      await this.contextLoader.load();
+      this.configValidator.setConfig(ConfigGenerator.Config).validate();
+      this.contextValidator.setContext(ContextLoader.context).validate();
+      this.getComponentGenerator().generate();
+    } catch (error) {
+      if (error instanceof InvalidConfigException) {
+        console.log(`Validation Failed : ${error.message}`);
+        return;
+      }
+      if (error instanceof NullValueException) {
+        console.log(`Null value exception : ${error.message}`);
+        return;
+      }
+      console.log(error);
+    }
   }
 }

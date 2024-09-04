@@ -1,7 +1,6 @@
 import { ExecutionContext, IGenerator, Type } from "@interfaces";
 import { DirectoryService, FileService } from "@lib";
 import { RCE, RFCE } from "@templates";
-import { join } from "path";
 import { ContextLoader } from "../context/Context.loader";
 
 export class ComponentGenerator implements IGenerator {
@@ -13,16 +12,30 @@ export class ComponentGenerator implements IGenerator {
     this.context = ContextLoader.context;
     this.directoryService = new DirectoryService();
     this.fileService = new FileService();
-    this.componentPath = join(process.cwd(), this.context.dist);
+    this.componentPath = `${process.cwd()}\\${this.context.dist}`;
   }
   private async generateFolder() {
     await this.directoryService.create(this.componentPath, this.context.name);
   }
+  private async generateParentDirectories() {
+    const directories = this.context.dist.split("\\");
+    let stack = "";
+    for (const directory of directories) {
+      const path = `${process.cwd()}\\${stack != "" ? stack + "\\" : ""}`;
+      if (!(await this.directoryService.exists(path, directory))) {
+        await this.directoryService.create(path, directory);
+      }
+      stack += directory;
+    }
+  }
   private async generateFile(extension: string, data?: string) {
-    this.fileService.create(
-      this.componentPath,
+    await this.fileService.create(
+      `${this.componentPath}\\${this.context.name}`,
       `${this.context.name}.${extension}`,
       data
+    );
+    console.log(
+      `Generated ${extension} File at ${this.componentPath}/${this.context.name}`
     );
   }
   private getTemplate() {
@@ -32,11 +45,12 @@ export class ComponentGenerator implements IGenerator {
     );
   }
   public async generate(): Promise<void> {
+    await this.generateParentDirectories();
     await this.generateFolder();
-    this.generateFile(this.context.style);
-    this.generateFile(this.context.template, this.getTemplate());
+    await this.generateFile(this.context.style);
+    await this.generateFile(this.context.template, this.getTemplate());
     if (this.context.test) {
-      this.generateFile(this.context.test_extension);
+      await this.generateFile(this.context.test_extension);
     }
   }
 }

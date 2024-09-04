@@ -16,15 +16,21 @@ export class DirectoryService {
     if (Array.isArray(names)) {
       names.forEach(async (name) => {
         await fs
-          .mkdir(`${path}/${name}`, { recursive: true })
+          .mkdir(`${path}\\${name}`, { recursive: true })
           .catch((_) => false);
       });
       return true;
     } else {
       await fs
-        .mkdir(`${path}/${names}`, { recursive: true })
+        .mkdir(`${path}\\${names}`, { recursive: true })
         .catch((_) => false);
       return true;
     }
+  }
+  async exists(path: string, name: string) {
+    return fs
+      .readdir(`${path}\\${name}`)
+      .then(() => true)
+      .catch(() => false);
   }
 }
