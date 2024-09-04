@@ -25,6 +25,10 @@ export class Application {
     try {
       await this.configGenerator.generate();
       await this.contextLoader.load();
+      if (ContextLoader.context.name == "--init") {
+        console.log("Config file generated successfully");
+        return;
+      }
       this.configValidator.setConfig(ConfigGenerator.Config).validate();
       this.contextValidator.setContext(ContextLoader.context).validate();
       this.getComponentGenerator().generate();

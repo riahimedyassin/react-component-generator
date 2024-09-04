@@ -1,14 +1,14 @@
 {
   "name": "rcg-cli-tool",
-  "version": "2.0.0",
-  "description": "CLI Tools that generates a full folder structure for your react project",
+  "version": "2.2.0",
+  "description": "CLI Tools to generate react components",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc & npx tsc-alias"
   },
   "bin": {
-    "react": "dist/index.js"
+    "rg": "dist/index.js"
   },
   "keywords": [
     "react",
@@ -22,8 +22,8 @@
     "type": "git",
     "url": "https://github.com/riahimedyassin/react-component-generator"
   },
-  "author": "Riahi Mohamed Yassin",
-  "license": "ISC",
+  "author": "Riahi Yassin",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.5.2"
   }
