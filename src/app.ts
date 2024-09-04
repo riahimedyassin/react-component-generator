@@ -2,7 +2,11 @@ import { ConfigGenerator, ContextLoader } from "@generators";
 import { ContextValidator } from "./validators/Context.validator";
 import { ConfigValidator } from "./validators/Config.validator";
 import { ComponentGenerator } from "./generators/components/Components.generator";
-import { InvalidConfigException, NullValueException } from "@errors";
+import {
+  InvalidArgsException,
+  InvalidConfigException,
+  NullValueException,
+} from "@errors";
 
 export class Application {
   private readonly contextLoader: ContextLoader;
@@ -40,6 +44,9 @@ export class Application {
       if (error instanceof NullValueException) {
         console.log(`Null value exception : ${error.message}`);
         return;
+      }
+      if (error instanceof InvalidArgsException) {
+        console.log(`Invalid / Missing args  : ${error.message}`);
       }
       console.log(error);
     }
