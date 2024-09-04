@@ -1,6 +1,5 @@
-import { InvalidConfigException } from "@errors";
+import { InvalidConfigException, NullValueException } from "@errors";
 import { Config, Style, Template, Type, ValidatorInterface } from "@interfaces";
-import { NullValueException } from "src/errors/NullValue.exception";
 
 export class ConfigValidator implements ValidatorInterface {
   constructor() {}

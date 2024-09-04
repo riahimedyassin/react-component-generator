@@ -1,7 +1,6 @@
-import { IGenerator } from "@interfaces";
+import { IGenerator, Config } from "@interfaces";
 import { FileService } from "@lib";
 import { DefaultConfigTemplate } from "@templates";
-import { Config } from "src/interfaces/Config.interface";
 
 export class ConfigGenerator implements IGenerator {
   public static instance: ConfigGenerator;

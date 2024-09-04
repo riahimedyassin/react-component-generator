@@ -1,6 +1,5 @@
-import { InvalidConfigException } from "@errors";
+import { InvalidConfigException, NullValueException } from "@errors";
 import { ExecutionContext, ValidatorInterface } from "@interfaces";
-import { NullValueException } from "src/errors/NullValue.exception";
 
 export class ContextValidator implements ValidatorInterface {
   private context!: ExecutionContext;

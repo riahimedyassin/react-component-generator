@@ -1,1 +1,2 @@
-export * from "./InvalidConfig.exception"
+export * from "./InvalidConfig.exception";
+export * from "./NullValue.exception";
