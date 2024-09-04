@@ -110,7 +110,8 @@
       "@interfaces": ["src/interfaces"],
       "@lib": ["src/lib"],
       "@validators": ["src/validators"],
-      "@templates" : ["src/templates"]
+      "@templates": ["src/templates"],
+      "@errors": ["src/errors"]
     }
   }
 }
