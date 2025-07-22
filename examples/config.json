@@ -1,0 +1,14 @@
+{
+  "core": {
+    "structure": "feature-based",
+    "template": "jsx",
+    "styling": "tailwind"
+  },
+  "state": {
+    "type": "redux"
+  },
+  "linting": {
+    "eslint": false,
+    "prettier": false
+  }
+}
