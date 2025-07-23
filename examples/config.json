@@ -4,6 +4,11 @@
     "template": "jsx",
     "styling": "tailwind"
   },
+  "component": {
+    "withStyling": true,
+    "withTest": false,
+    "type": "class"
+  },
   "state": {
     "type": "redux"
   },

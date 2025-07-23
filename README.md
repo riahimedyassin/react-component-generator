@@ -77,4 +77,3 @@ You can specify the **Name of Component** and generated file type directly from 
    ```
 
 ---
-

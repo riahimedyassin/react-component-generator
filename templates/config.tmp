@@ -1,0 +1,19 @@
+{
+  "core": {
+    "structure": {{STRUCTURE}},
+    "template": {{TEMPLATE}} ,
+  },
+  "state": {
+    "type": {{STATE}}
+  },
+  "linting": {
+    "eslint": {{ESLIN}},
+    "prettier": {{PRETTIER}}
+  },
+  "component": {
+    "withStyling": {{WITHSTYLING}},
+    "styling": {{STYLING}},
+    "withTest": {{WITHTEST}},
+    "type": {{TYPE}}
+  },
+}
