@@ -1,0 +1,26 @@
+package cmd
+
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+)
+
+var (
+	rootCmd = cobra.Command{
+		Use:   "rg",
+		Short: "React Generator - V0.0.1",
+		Long:  "React Generator is a pacakge used to manage your react project seamlisly with ease",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Print("Hello world")
+		},
+	}
+)
+
+func init() {
+
+}
+
+func Execute() {
+	rootCmd.Execute()
+}

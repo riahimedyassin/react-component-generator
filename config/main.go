@@ -6,6 +6,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/lib/files"
 )
 
+// Will be replaced with viper config
 type Config struct {
 	globalConfig GlobalConfig
 	execPath     string

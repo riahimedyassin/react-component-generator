@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/riahimedyassin/react-component-generator/cmd"
 	"github.com/riahimedyassin/react-component-generator/config"
 )
 
@@ -12,4 +13,6 @@ func main() {
 		fmt.Printf("Cannot load config , %v", err)
 		return
 	}
+	cmd.Execute()
+
 }
