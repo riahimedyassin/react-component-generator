@@ -1,4 +1,4 @@
-package generators
+package component_generator
 
 import "github.com/riahimedyassin/react-component-generator/config"
 
