@@ -2,21 +2,24 @@ package files
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 )
 
 func WriteFile(path, name, extension, content string) error {
-	return os.WriteFile(fmt.Sprintf("%s\\%s", path, name), []byte(content), os.ModeAppend)
+	fullPath := fmt.Sprintf("%s\\%s.%s", path, name, extension)
+	fmt.Print(fullPath)
+	err := os.WriteFile(fullPath, []byte(content), fs.ModePerm)
+	if err != nil {
+		fmt.Print("write file error")
+	}
+	return err
 }
 
-func ReadFile(path string) (string, error) {
+func ReadFile(path string) ([]byte, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(content), nil
+	return content, nil
 }
-
-func appendFile(path, content string) error   // APPEND Flag
-func overrideFile(path, content string) error // OVERRIDE Flag
-func createFile(path, content string) error   // CREATE Flag

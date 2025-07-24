@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/riahimedyassin/react-component-generator/config"
+	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -18,12 +19,11 @@ var (
 
 var (
 	generateCompCMD = &cobra.Command{
-		Use:   "component",
+		Use:   "c  [component name]",
 		Short: "generate a react component",
 		Long:  "Generate a react component. For more infos, type in rg g c --help",
 		Aliases: []string{
-			"c",
-			"comp",
+			"component",
 		},
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
@@ -37,6 +37,14 @@ var (
 				return err
 			}
 			return config.Load(cwd)
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			compGen := generator.NewComponentGenerator(&config.GlobalConfig)
+			cwd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+			return compGen.Generate(cwd, args[0])
 		},
 	}
 )
@@ -52,5 +60,4 @@ func setupFlags() {
 
 func init() {
 	setupFlags()
-	generateCMD.AddCommand(generateCompCMD)
 }

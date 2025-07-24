@@ -20,5 +20,4 @@ var (
 func init() {
 	generatePageCMD.Flags().StringVarP(&route, "route", "r", "", "Define the page route. This flag is required.")
 	generatePageCMD.MarkFlagRequired("route")
-	generateCMD.AddCommand(generateCMD)
 }

@@ -1,19 +1,21 @@
 package config
 
 import (
+	"github.com/riahimedyassin/react-component-generator/config/enums"
 	"github.com/riahimedyassin/react-component-generator/config/tokens"
 	"github.com/spf13/viper"
 )
 
 var (
-	config   Config
-	defaults = map[string]any{
-		tokens.STRUCTURE:  "",
+	GlobalConfig Config // Global app configuration
+	defaults     = map[string]any{
+		tokens.STRUCTURE:  "feature-based",
 		tokens.TEMPLATE:   "tsx",
 		tokens.STYLING:    "tailwind",
 		tokens.STATE_TYPE: "zustand",
 		tokens.ESLINT:     true,
 		tokens.PRETTIER:   true,
+		tokens.TYPE:       enums.FUNCTIONNAL,
 	}
 )
 
@@ -38,5 +40,5 @@ func Load(cwd string) error {
 		}
 		return err
 	}
-	return viper.Unmarshal(&config)
+	return viper.Unmarshal(&GlobalConfig)
 }

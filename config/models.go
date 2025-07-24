@@ -1,9 +1,11 @@
 package config
 
+import "github.com/riahimedyassin/react-component-generator/config/enums"
+
 type coreConfig struct {
-	Structure string `json:"structure"`
-	Template  string `json:"template"`
-	Styling   string `json:"styling"`
+	Structure string         `json:"structure"`
+	Template  enums.Template `json:"template"`
+	Styling   string         `json:"styling"`
 }
 
 type stateConfig struct {
@@ -15,8 +17,15 @@ type lintingConfig struct {
 	Prettier bool `json:"prettier"`
 }
 
+type componentConfig struct {
+	WithStyling bool
+	WithTest    bool
+	Type        enums.ComponentType
+}
+
 type Config struct {
-	Core    coreConfig    `json:"core"`
-	State   stateConfig   `json:"state"`
-	Linting lintingConfig `json:"linting"`
+	Core      coreConfig      `json:"core"`
+	State     stateConfig     `json:"state"`
+	Linting   lintingConfig   `json:"linting"`
+	Component componentConfig `json:"component"`
 }
