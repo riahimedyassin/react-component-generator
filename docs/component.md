@@ -12,8 +12,7 @@ PS : You can combine multiple flags all at once.
 
 - -s : with style file
 - -t : with test file
-- -r : Raw file (TS / JS). The component extension will be decided depending on the inital project setup. If the project is a typescript based project, .ts will be the picked extension.
-- class : Class component.
+- -c : Component type, should be one of two options, **class** or **func**(stands for functionnal).
 
 ### Typed Out
 

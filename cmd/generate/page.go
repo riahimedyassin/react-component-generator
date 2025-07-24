@@ -1,14 +1,6 @@
-package cmd
+package generate
 
 import "github.com/spf13/cobra"
-
-var (
-	generateCMD = &cobra.Command{
-		Use:   "generate",
-		Short: "generate everything related to react.",
-		Long:  "The generate command is used to generate your components, pages, contexts, hooks etc.\nThe generate command should be followed by one of the upcoming commands:\n* p : Generate page. Type in g p --help for more.",
-	}
-)
 
 var (
 	route           string // will be used to append the route to the ReactRouter main
@@ -25,13 +17,8 @@ var (
 	}
 )
 
-func setupGeneratePageCMD() {
+func init() {
 	generatePageCMD.Flags().StringVarP(&route, "route", "r", "", "Define the page route. This flag is required.")
 	generatePageCMD.MarkFlagRequired("route")
-}
-
-func init() {
-	setupGeneratePageCMD()
-	generateCMD.AddCommand(generatePageCMD)
-	rootCmd.AddCommand(generateCMD)
+	generateCMD.AddCommand(generateCMD)
 }

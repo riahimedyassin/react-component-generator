@@ -1,4 +1,4 @@
-package cmd
+package root
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	rootCmd = cobra.Command{
+	RootCmd = cobra.Command{
 		Use:   "reactgenerator",
 		Short: "React Generator - V0.0.1",
 		Long:  "React Generator is a pacakge used to manage your react project seamlisly with ease",
@@ -25,5 +25,5 @@ func init() {
 }
 
 func Execute() {
-	rootCmd.Execute()
+	RootCmd.Execute()
 }

@@ -1,9 +1,12 @@
 package files
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
-func WriteFile(path, content string, flag Flags) error {
-	return nil
+func WriteFile(path, name, extension, content string) error {
+	return os.WriteFile(fmt.Sprintf("%s\\%s", path, name), []byte(content), os.ModeAppend)
 }
 
 func ReadFile(path string) (string, error) {

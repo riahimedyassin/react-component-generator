@@ -1,18 +1,19 @@
 package config
 
 import (
+	"github.com/riahimedyassin/react-component-generator/config/tokens"
 	"github.com/spf13/viper"
 )
 
 var (
 	config   Config
 	defaults = map[string]any{
-		"core.structure": "",
-		"core.template":  "tsx",
-		"core.styling":   "tailwind",
-		"state.type":     "zustand",
-		"linting.eslint": true,
-		"core.prettier":  true,
+		tokens.STRUCTURE:  "",
+		tokens.TEMPLATE:   "tsx",
+		tokens.STYLING:    "tailwind",
+		tokens.STATE_TYPE: "zustand",
+		tokens.ESLINT:     true,
+		tokens.PRETTIER:   true,
 	}
 )
 
@@ -22,22 +23,20 @@ func setDefaults() {
 	}
 }
 
-func Load(cwd string) (*Config, error) {
+// Called after
+func Load(cwd string) error {
 	setDefaults()
 	viper.AddConfigPath(cwd)
-	viper.SetConfigName("rgconfig")
+	viper.SetConfigName("rg.config")
 	viper.SetConfigType("json")
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			if err := viper.SafeWriteConfig(); err != nil {
-				return nil, err
+				return err
 			}
 		}
-		return nil, err
+		return err
 	}
-	if err := viper.Unmarshal(&config); err != nil {
-		return nil, err
-	}
-	return &config, nil
+	return viper.Unmarshal(&config)
 }
