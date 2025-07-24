@@ -1,36 +1,43 @@
 package config
 
 import (
-	"encoding/json"
-
-	"github.com/riahimedyassin/react-component-generator/lib/files"
+	"github.com/spf13/viper"
 )
 
-// Will be replaced with viper config
-type Config struct {
-	globalConfig GlobalConfig
-	execPath     string
-}
+var (
+	config   Config
+	defaults = map[string]any{
+		"core.structure": "",
+		"core.template":  "tsx",
+		"core.styling":   "tailwind",
+		"state.type":     "zustand",
+		"linting.eslint": true,
+		"core.prettier":  true,
+	}
+)
 
-func NewConfig(execPath string) *Config {
-	return &Config{
-		execPath: execPath,
+func setDefaults() {
+	for key, value := range defaults {
+		viper.SetDefault(key, value)
 	}
 }
 
-func (c *Config) Load() error {
-	content, err := files.ReadFile(c.execPath)
-	if err != nil {
-		return err
-	}
-	var config GlobalConfig
-	if err := json.Unmarshal([]byte(content), &config); err != nil {
-		return err
-	}
-	c.globalConfig = config
-	return nil
-}
+func Load(cwd string) (*Config, error) {
+	setDefaults()
+	viper.AddConfigPath(cwd)
+	viper.SetConfigName("rgconfig")
+	viper.SetConfigType("json")
 
-func (c *Config) GenerateConfig(flags string) error {
-	return nil
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			if err := viper.SafeWriteConfig(); err != nil {
+				return nil, err
+			}
+		}
+		return nil, err
+	}
+	if err := viper.Unmarshal(&config); err != nil {
+		return nil, err
+	}
+	return &config, nil
 }

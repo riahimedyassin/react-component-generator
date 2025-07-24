@@ -15,7 +15,7 @@ type lintingConfig struct {
 	Prettier bool `json:"prettier"`
 }
 
-type GlobalConfig struct {
+type Config struct {
 	Core    coreConfig    `json:"core"`
 	State   stateConfig   `json:"state"`
 	Linting lintingConfig `json:"linting"`
