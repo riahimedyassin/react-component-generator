@@ -16,3 +16,7 @@ Some of those features are mentioned in the next section.
   - [ ] ESLint + Prettier setup
   - [ ] Testing framework (Jest / RTL / Cypress)
   - [ ] Project structure templates (`feature-based`, `atomic`, etc.)
+
+## Important
+
+- Adding a config initializer.

@@ -1,0 +1,19 @@
+{
+  "component": {
+    "type": "func",
+    "withstyling": false,
+    "withtest": true
+  },
+  "core": {
+    "structure": "feature-based",
+    "styling": "tailwind",
+    "template": "tsx"
+  },
+  "linting": {
+    "eslint": true,
+    "prettier": true
+  },
+  "state": {
+    "type": "zustand"
+  }
+}

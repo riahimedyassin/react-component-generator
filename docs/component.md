@@ -21,5 +21,5 @@ PS : You can combine multiple flags all at once.
 ### Examples
 
 ```bash
-yo g c -s -nt
+rg g c [name] -s -c
 ```
