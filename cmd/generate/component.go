@@ -12,7 +12,7 @@ import (
 
 // Flags values.
 var (
-	compType    string
+	class       bool
 	withStyling bool
 	withTest    bool
 )
@@ -39,23 +39,23 @@ var (
 			return config.Load(cwd)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			compGen := component_generator.NewComponentGenerator(&config.GlobalConfig)
-			cwd, err := os.Getwd()
+			flagsOptions, err := component_generator.NewFlagOptions(cmd)
 			if err != nil {
 				return err
 			}
-			return compGen.Generate(cwd, args[0])
+			compGen := component_generator.NewComponentGenerator(args[0], &config.GlobalConfig, flagsOptions)
+			return compGen.Generate()
 		},
 	}
 )
 
 func setupFlags() {
-	generateCompCMD.Flags().StringVarP(&compType, "comp", "c", "", "Component type (class or functionnal)")
+	generateCompCMD.Flags().BoolVarP(&class, "class", "c", false, "Class component")
 	generateCompCMD.Flags().BoolVarP(&withStyling, "style", "s", false, "Add styling file to the component")
 	generateCompCMD.Flags().BoolVarP(&withTest, "test", "t", false, "Add test file to your component")
-	viper.BindPFlag("component.type", generateCompCMD.Flags().Lookup("comp"))
-	viper.BindPFlag("component.withTest", generateCompCMD.Flags().Lookup("test"))
-	viper.BindPFlag("component.withStyling", generateCompCMD.Flags().Lookup("style"))
+	// VIPER BINDING
+	viper.BindPFlag(config.TEST, generateCompCMD.Flags().Lookup("test"))
+	viper.BindPFlag(config.WITH_STYLING, generateCompCMD.Flags().Lookup("style"))
 }
 
 func init() {

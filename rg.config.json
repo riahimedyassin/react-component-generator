@@ -1,0 +1,14 @@
+{
+  "component": {
+    "defaultexport": false,
+    "styling": "css",
+    "test": false,
+    "type": "functional",
+    "withstyling": false,
+    "withtest": false
+  },
+  "project": {
+    "base": "typescript",
+    "structure": "feature-based"
+  }
+}

@@ -9,4 +9,6 @@ const (
 	TYPE              = "component.type"
 	DEFAULT_EXPORT    = "component.defaultExport"
 	TEST              = "component.test"
+	WITH_STYLING      = "component.withStyling"
+	WITH_TEST         = "component.withTest"
 )

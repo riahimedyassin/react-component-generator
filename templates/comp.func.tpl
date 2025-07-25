@@ -3,7 +3,7 @@ import React from 'react'
 
 {{EXTRA_DEFINITIONS}}
 
-export {{DEFAULTED}} function {{COMP_NAME}}() {
+export {{DEFAULTED}} function {{COMP_NAME}}({{EXTRA_PARAMS}}) {
   return (
     <div>
       

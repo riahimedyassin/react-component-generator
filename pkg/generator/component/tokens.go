@@ -7,5 +7,6 @@ const (
 	EXTRA_IMPORT      TComponentTokens = "{{EXTRA_IMPORT}}"
 	EXTRA_DEFINITIONS TComponentTokens = "{{EXTRA_DEFINITIONS}}" // Predef values or interfaces
 	COMP_NAME         TComponentTokens = "{{COMP_NAME}}"
-	DEFAULTED         TComponentTokens = "{{DEFAULTED}}" // Default export.
+	DEFAULTED         TComponentTokens = "{{DEFAULTED}}"    // Default export.
+	EXTRA_PARAMS      TComponentTokens = "{{EXTRA_PARAMS}}" // Default export.
 )

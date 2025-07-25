@@ -1,13 +1,14 @@
-// TODO : work on this
 {
   "project": {
     "base": "typescript",
-    "structure": {{PROJECT_STRUCTURE}}
+    "structure": "feature-based",
+    "styling": "none"
   },
   "component": {
-    "styling": "none",
     "type": "functional",
     "defaultExport": false,
-    "test": false
+    "test": false,
+    "withStyling": true,
+    "withTest": true
   }
 }

@@ -1,12 +1,14 @@
 {
   "project": {
     "base": "typescript",
-    "structure": "feature-based"
+    "structure": "feature-based",
+    "styling": "none"
   },
   "component": {
-    "styling": "none",
     "type": "functional",
     "defaultExport": false,
-    "test": false
+    "test": false,
+    "withStyling": true,
+    "withTest": true
   }
 }

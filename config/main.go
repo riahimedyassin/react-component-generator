@@ -14,6 +14,8 @@ var (
 		STYLING:           enums.CSS,
 		TEST:              false,
 		TYPE:              enums.FUNCTIONAL,
+		WITH_STYLING:      false,
+		WITH_TEST:         false,
 	}
 )
 
