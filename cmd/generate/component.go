@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/riahimedyassin/react-component-generator/config"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -39,7 +39,7 @@ var (
 			return config.Load(cwd)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			compGen := generator.NewComponentGenerator(&config.GlobalConfig)
+			compGen := component_generator.NewComponentGenerator(&config.GlobalConfig)
 			cwd, err := os.Getwd()
 			if err != nil {
 				return err

@@ -1,0 +1,12 @@
+{
+  "project": {
+    "base": "typescript",
+    "structure": "feature-based"
+  },
+  "component": {
+    "styling": "none",
+    "type": "functional",
+    "defaultExport": false,
+    "test": false
+  }
+}

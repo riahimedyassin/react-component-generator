@@ -10,13 +10,20 @@ PS : You can combine multiple flags all at once.
 
 ### Alias
 
-- -s : with style file
-- -t : with test file
-- -c : Component type, should be one of two options, **class** or **func**(stands for functionnal).
+- -s : With style file
+- -t : With test file
+- -c : Class component
 
-### Typed Out
+### Styling 🎨
 
-- -style={{STYLE_ENUM}}
+| Style    | Description                                                                |
+| -------- | -------------------------------------------------------------------------- |
+| CSS      | **Default** Project styling                                                |
+| SCSS     | **rg** will be responsible for **installing** approriate **dependencies**. |
+| Tailwind | **rg** will be responsible for **installing** approriate **dependencies**. |
+
+Note that changing your styling configuration after the project initialization could lead to some comptability issues.
+Chosing to implement a migration strategy is not decided yet. This could be implmeneted or ignored in future realeses.
 
 ### Examples
 

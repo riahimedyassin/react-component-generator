@@ -1,4 +1,4 @@
-package tokens
+package component_generator
 
 // Replacable tokens in templates.
 type TComponentTokens string

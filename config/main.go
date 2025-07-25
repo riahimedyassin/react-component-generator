@@ -2,26 +2,24 @@ package config
 
 import (
 	"github.com/riahimedyassin/react-component-generator/config/enums"
-	"github.com/riahimedyassin/react-component-generator/config/tokens"
 	"github.com/spf13/viper"
 )
 
 var (
 	GlobalConfig Config // Global app configuration
-	defaults     = map[string]any{
-		tokens.STRUCTURE:  "feature-based",
-		tokens.TEMPLATE:   "tsx",
-		tokens.STYLING:    "tailwind",
-		tokens.STATE_TYPE: "zustand",
-		tokens.ESLINT:     true,
-		tokens.PRETTIER:   true,
-		tokens.TYPE:       enums.FUNCTIONNAL,
+	defaults     = map[ConfigTokens]any{
+		DEFAULT_EXPORT:    false,
+		PROJECT_BASE:      enums.TYPESCRIPT,
+		PROJECT_STRUCTURE: "feature-based",
+		STYLING:           enums.CSS,
+		TEST:              false,
+		TYPE:              enums.FUNCTIONAL,
 	}
 )
 
 func setDefaults() {
 	for key, value := range defaults {
-		viper.SetDefault(key, value)
+		viper.SetDefault(string(key), value)
 	}
 }
 
