@@ -3,8 +3,11 @@ package generate
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/riahimedyassin/react-component-generator/config"
+	"github.com/riahimedyassin/react-component-generator/lib"
+	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -39,12 +42,25 @@ var (
 			return config.Load(cwd)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+			name, path := lib.Capitalize(filepath.Base(args[0])), filepath.Dir(args[0])
 			flagsOptions, err := component_generator.NewFlagOptions(cmd)
 			if err != nil {
 				return err
 			}
-			compGen := component_generator.NewComponentGenerator(args[0], &config.GlobalConfig, flagsOptions)
-			return compGen.Generate()
+			compFileSpec, err := component_generator.
+				NewComponentFileSpecGenerator(name,
+					path,
+					&config.GlobalConfig,
+					flagsOptions,
+					component_generator.NewStyleGenerator(name, path, &config.GlobalConfig, flagsOptions),
+				).
+				GetFileSpec()
+			if err != nil {
+				return err
+			}
+			return generator.NewGenerator().Generate(*compFileSpec)
+			// compGen := component_generator.NewComponentGenerator(args[0], &config.GlobalConfig, flagsOptions)
+			// return compGen.Generate()
 		},
 	}
 )
