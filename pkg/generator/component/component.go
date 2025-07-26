@@ -1,8 +1,10 @@
 package component_generator
 
 import (
+	"context"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
@@ -10,6 +12,8 @@ import (
 	"github.com/riahimedyassin/react-component-generator/lib/files"
 )
 
+// TODO : Implement a clean up method if a file creation failed and another succeded
+// TODO : Make the generator more generic so that it could handle different types. Maybe a global generator struct will make your code far more DRY.
 type ComponentGenerator struct {
 	path    string
 	name    string
@@ -31,6 +35,31 @@ func NewComponentGenerator(fullFilePath string, config *config.Config, options *
 
 // todo :  Check if the name is a path and dive/create the target directory.
 func (g *ComponentGenerator) Generate() error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	chanErr := make(chan error, 2)
+	go func() {
+		chanErr <- g.generateComponent()
+	}()
+	go func() {
+		chanErr <- g.generateStyling()
+	}()
+
+	var firstErr error
+	for i := 0; i < 2; i++ {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case err := <-chanErr:
+			if err != nil && firstErr == nil {
+				firstErr = err
+			}
+		}
+	}
+	return firstErr
+}
+
+func (g *ComponentGenerator) generateComponent() error {
 	template, err := g.getTemplate()
 	if err != nil {
 		return err
@@ -53,7 +82,7 @@ func (g *ComponentGenerator) parseTemplate(template string) string {
 		params = "{params} : " + g.name + "Props"
 	}
 	parsedTemplate = strings.Replace(template, string(EXTRA_DEFINITIONS), g.getExtraDefinitions(), 1)
-	parsedTemplate = strings.Replace(parsedTemplate, string(EXTRA_IMPORT), "", 1)
+	parsedTemplate = strings.Replace(parsedTemplate, string(EXTRA_IMPORT), g.getExtraImport(), 1)
 	parsedTemplate = strings.Replace(parsedTemplate, string(DEFAULTED), defaultedExport, 1)
 	parsedTemplate = strings.Replace(parsedTemplate, string(COMP_NAME), g.name, 1)
 	parsedTemplate = strings.Replace(parsedTemplate, string(EXTRA_PARAMS), params, 1)
@@ -89,19 +118,37 @@ func (g *ComponentGenerator) getTemplate() (string, error) {
 	return string(content), nil
 }
 
-// func (g *ComponentGenerator) generateStyling() error {
-// 	extensions := map[enums.Styling]string{
-// 		enums.SCSS: "scss",
-// 		enums.CSS:  "css",
-// 	}
-// 	switch g.config.Project.Styling {
-// 	case enums.NONE, enums.TAILWIND:
-// 		return nil
-// 	}
-// 	if g.config.Component.WithStyling {
-// 		// validation will be handeled at an upper level, not to worry about here.
-// 		// ! validation will happen at an upper level in an upcoming validation package.
-// 		extension := extensions[g.config.Project.Styling]
-// 	}
-// 	return nil
-// }
+func (g *ComponentGenerator) generateStyling() error {
+	switch g.config.Project.Styling {
+	case enums.NONE, enums.TAILWIND:
+		return nil
+	}
+	if g.config.Component.WithStyling {
+		extension := g.getStyleExtension()
+		if err := files.WriteFile(g.path, g.name, extension, ""); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (g *ComponentGenerator) getStyleExtension() string {
+	extensions := map[enums.Styling]string{
+		enums.SCSS: "scss",
+		enums.CSS:  "css",
+	}
+	extension, ok := extensions[g.config.Project.Styling]
+	if !ok {
+		extension = "css" // default style
+	}
+	return extension
+}
+
+func (g *ComponentGenerator) getExtraImport() string {
+	res := ""
+	if g.config.Component.WithStyling {
+		extension := g.getStyleExtension()
+		res += "import \"./" + g.name + "." + extension + "\""
+	}
+	return res
+}
