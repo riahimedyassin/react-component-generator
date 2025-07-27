@@ -9,4 +9,5 @@ type TemplatePaths string
 var (
 	CLASS_COMPONENT_TEMPLATE_PATH = lib.GetTemplatePath("comp.class.tpl")
 	FUNC_COMPONENT_TEMPLATE_PATH  = lib.GetTemplatePath("comp.func.tpl")
+	HOOK_TEMPLATE_PATH            = lib.GetTemplatePath("hook.tpl")
 )

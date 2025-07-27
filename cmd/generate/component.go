@@ -2,7 +2,6 @@ package generate
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/riahimedyassin/react-component-generator/config"
@@ -21,6 +20,7 @@ var (
 	withTest    bool
 )
 
+// todo : Add validation
 var (
 	generateCompCMD = &cobra.Command{
 		Use:   "c  [component name]",
@@ -35,13 +35,7 @@ var (
 			}
 			return nil
 		},
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			cwd, err := os.Getwd()
-			if err != nil {
-				return err
-			}
-			return config.Load(cwd)
-		},
+
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, path := lib.Capitalize(filepath.Base(args[0])), filepath.Dir(args[0])
 			flagsOptions, err := component_generator.NewFlagOptions(cmd)
