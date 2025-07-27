@@ -16,6 +16,7 @@ var (
 		TYPE:              enums.FUNCTIONAL,
 		WITH_STYLING:      false,
 		WITH_TEST:         false,
+		WITH_HOOK_TEST:    true,
 	}
 )
 

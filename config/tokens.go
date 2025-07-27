@@ -11,4 +11,5 @@ const (
 	TEST              = "component.test"
 	WITH_STYLING      = "component.withStyling"
 	WITH_TEST         = "component.withTest"
+	WITH_HOOK_TEST    = "hook.withTest"
 )

@@ -10,5 +10,8 @@
     "test": false,
     "withStyling": true,
     "withTest": true
+  },
+  "hook": {
+    "withTest": true
   }
 }

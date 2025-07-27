@@ -10,10 +10,11 @@ import (
 )
 
 type HookFileSpecGenerator struct {
-	name    string
-	path    string
-	config  *config.Config
-	options *FlagsOptions
+	name     string
+	path     string
+	config   *config.Config
+	options  *FlagsOptions
+	testFile *HookTestGenerator
 }
 
 func NewHookFileSpecGenerator(
@@ -21,18 +22,23 @@ func NewHookFileSpecGenerator(
 	path string,
 	config *config.Config,
 	options *FlagsOptions,
+	testFile *HookTestGenerator,
 ) *HookFileSpecGenerator {
 	return &HookFileSpecGenerator{
-		name:    name,
-		path:    path,
-		config:  config,
-		options: options,
+		name:     name,
+		path:     path,
+		config:   config,
+		options:  options,
+		testFile: testFile,
 	}
 }
 
 func (g *HookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	content, err := g.generateContent()
 	if err != nil {
+		return nil, err
+	}
+	if err := g.testFile.Generate(); err != nil {
 		return nil, err
 	}
 	fileSpec := &generator.FileSpec{

@@ -1,5 +1,9 @@
 package generator
 
+type FileSpecDefiner interface {
+	GetFileSpec() (*FileSpec, error)
+}
+
 type FileSpec struct {
 	Name      string
 	Content   string
@@ -19,8 +23,4 @@ func NewFileSpec(
 		Path:      Path,
 		Extension: Extension,
 	}
-}
-
-type FileSpecDefiner interface {
-	GetFileSpec() (*FileSpec, error)
 }

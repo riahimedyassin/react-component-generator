@@ -16,7 +16,12 @@ type projectConfig struct {
 	Structure string
 }
 
+type hooksConfig struct {
+	WithTest bool
+}
+
 type Config struct {
 	Component componentConfig
 	Project   projectConfig
+	Hooks     hooksConfig
 }
