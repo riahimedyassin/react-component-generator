@@ -15,15 +15,17 @@ type ComponentFileSpecGenerator struct {
 	config         *config.Config
 	options        *FlagsOptions
 	styleGenerator *StyleGenerator
+	testGenerator  *TestGenerator
 }
 
-func NewComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions, styleGenerator *StyleGenerator) *ComponentFileSpecGenerator {
+func NewComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions, styleGenerator *StyleGenerator, testGenerator *TestGenerator) *ComponentFileSpecGenerator {
 	return &ComponentFileSpecGenerator{
 		name:           name,
 		config:         config,
 		options:        options,
 		path:           path,
 		styleGenerator: styleGenerator,
+		testGenerator:  testGenerator,
 	}
 }
 
@@ -33,6 +35,9 @@ func (c *ComponentFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) 
 		return nil, err
 	}
 	if err := c.styleGenerator.Generate(); err != nil {
+		return nil, err
+	}
+	if err := c.testGenerator.Generate(); err != nil {
 		return nil, err
 	}
 	return generator.NewFileSpec(c.name, c.path, c.getExtension(), content), nil

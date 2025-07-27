@@ -2,10 +2,10 @@
   "component": {
     "defaultexport": false,
     "styling": "css",
-    "test": false,
+    "test": true,
     "type": "functional",
-    "withstyling": false,
-    "withtest": false
+    "withStyling": true,
+    "withTest": true
   },
   "project": {
     "base": "typescript",
