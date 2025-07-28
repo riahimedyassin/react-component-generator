@@ -3,18 +3,19 @@ package component_generator
 import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
-	"github.com/riahimedyassin/react-component-generator/lib/files"
+	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
+	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 )
 
-type TestGenerator struct {
+type testGenerator struct {
 	name    string
 	path    string
 	config  *config.Config
 	options *FlagsOptions
 }
 
-func NewTestGenerator(name, path string, config *config.Config, options *FlagsOptions) *TestGenerator {
-	return &TestGenerator{
+func newTestGenerator(name, path string, config *config.Config, options *FlagsOptions) *testGenerator {
+	return &testGenerator{
 		name:    name,
 		path:    path,
 		config:  config,
@@ -22,17 +23,15 @@ func NewTestGenerator(name, path string, config *config.Config, options *FlagsOp
 	}
 }
 
-// todo : spec file content
-func (g *TestGenerator) Generate() error {
+// todo :  generate testing content
+func (g *testGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	if g.config.Component.WithTest {
-		if err := files.WriteFile(g.path, g.name, g.getExtension(), ""); err != nil {
-			return err
-		}
+		return generator.NewFileSpec(g.name, g.path, g.getExtension(), ""), nil
 	}
-	return nil
+	return nil, rg_errors.NewIgnoreDefinerError()
 }
 
-func (g *TestGenerator) getExtension() string {
+func (g *testGenerator) getExtension() string {
 	if g.config.Project.Base == enums.TYPESCRIPT {
 		return "spec.ts"
 	}

@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/riahimedyassin/react-component-generator/config"
@@ -22,6 +23,13 @@ var generateHookCMD = &cobra.Command{
 		}
 		return nil
 	},
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		cwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		return config.Load(cwd)
+	},
 
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name, path := filepath.Base(args[0]), filepath.Dir(args[0])
@@ -29,14 +37,14 @@ var generateHookCMD = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fileSpec, err := hooks_generator.NewHookFileSpecGenerator(
+		fileSpec := hooks_generator.NewHookFileSpecGenerator(
 			name, path, &config.GlobalConfig,
 			flags,
 			nil,
-		).GetFileSpec()
+		)
 		if err != nil {
 			return err
 		}
-		return generator.NewGenerator().Generate(*fileSpec)
+		return generator.NewGenerator().Generate(fileSpec)
 	},
 }

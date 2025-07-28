@@ -9,41 +9,31 @@ import (
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 )
 
-type ComponentFileSpecGenerator struct {
-	name           string
-	path           string
-	config         *config.Config
-	options        *FlagsOptions
-	styleGenerator *StyleGenerator
-	testGenerator  *TestGenerator
+type componentFileSpecGenerator struct {
+	name    string
+	path    string
+	config  *config.Config
+	options *FlagsOptions
 }
 
-func NewComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions, styleGenerator *StyleGenerator, testGenerator *TestGenerator) *ComponentFileSpecGenerator {
-	return &ComponentFileSpecGenerator{
-		name:           name,
-		config:         config,
-		options:        options,
-		path:           path,
-		styleGenerator: styleGenerator,
-		testGenerator:  testGenerator,
+func newComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions) *componentFileSpecGenerator {
+	return &componentFileSpecGenerator{
+		name:    name,
+		config:  config,
+		options: options,
+		path:    path,
 	}
 }
 
-func (c *ComponentFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (c *componentFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	content, err := c.generateContent()
 	if err != nil {
-		return nil, err
-	}
-	if err := c.styleGenerator.Generate(); err != nil {
-		return nil, err
-	}
-	if err := c.testGenerator.Generate(); err != nil {
 		return nil, err
 	}
 	return generator.NewFileSpec(c.name, c.path, c.getExtension(), content), nil
 }
 
-func (c *ComponentFileSpecGenerator) generateContent() (string, error) {
+func (c *componentFileSpecGenerator) generateContent() (string, error) {
 	template, err := c.getTemplate()
 	if err != nil {
 		return "", err
@@ -65,7 +55,7 @@ func (c *ComponentFileSpecGenerator) generateContent() (string, error) {
 	return parsedTemplate, nil
 }
 
-func (g *ComponentFileSpecGenerator) getExtraDefinitions() string {
+func (g *componentFileSpecGenerator) getExtraDefinitions() string {
 	res := ""
 	if g.config.Project.Base == enums.TYPESCRIPT {
 		res += "interface " + g.name + "Props {\n}\n"
@@ -73,14 +63,14 @@ func (g *ComponentFileSpecGenerator) getExtraDefinitions() string {
 	return res
 }
 
-func (g *ComponentFileSpecGenerator) getExtension() string {
+func (g *componentFileSpecGenerator) getExtension() string {
 	if g.config.Project.Base == enums.JAVASCRIPT {
 		return "jsx"
 	}
 	return "tsx"
 }
 
-func (g *ComponentFileSpecGenerator) getTemplate() (string, error) {
+func (g *componentFileSpecGenerator) getTemplate() (string, error) {
 	var path string
 	if g.options.ClassComponent || g.config.Component.Type == enums.CLASS {
 		path = config.CLASS_COMPONENT_TEMPLATE_PATH
@@ -94,7 +84,7 @@ func (g *ComponentFileSpecGenerator) getTemplate() (string, error) {
 	return string(content), nil
 }
 
-func (g *ComponentFileSpecGenerator) getStyleExtension() string {
+func (g *componentFileSpecGenerator) getStyleExtension() string {
 	extensions := map[enums.Styling]string{
 		enums.SCSS: "scss",
 		enums.CSS:  "css",
@@ -106,7 +96,7 @@ func (g *ComponentFileSpecGenerator) getStyleExtension() string {
 	return extension
 }
 
-func (g *ComponentFileSpecGenerator) getExtraImport() string {
+func (g *componentFileSpecGenerator) getExtraImport() string {
 	res := ""
 	if g.config.Component.WithStyling {
 		extension := g.getStyleExtension()
