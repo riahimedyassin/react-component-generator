@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/riahimedyassin/react-component-generator/config"
@@ -35,27 +36,22 @@ var (
 			}
 			return nil
 		},
-
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			cwd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+			return config.Load(cwd)
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, path := lib.Capitalize(filepath.Base(args[0])), filepath.Dir(args[0])
 			flagsOptions, err := component_generator.NewFlagOptions(cmd)
 			if err != nil {
 				return err
 			}
-			compFileSpec, err := component_generator.
-				NewComponentFileSpecGenerator(name,
-					path,
-					&config.GlobalConfig,
-					flagsOptions,
-					component_generator.NewStyleGenerator(name, path, &config.GlobalConfig, flagsOptions),
-					component_generator.NewTestGenerator(name, path, &config.GlobalConfig, flagsOptions),
-				).
-				GetFileSpec()
-			if err != nil {
-				return err
-			}
-			return generator.NewGenerator().Generate(*compFileSpec)
-
+			compWrapper := component_generator.NewComponentWrapper(name, path, &config.GlobalConfig, flagsOptions)
+			fileSpecDefiners := compWrapper.GetDefiners()
+			return generator.NewGenerator().Generate(fileSpecDefiners...)
 		},
 	}
 )

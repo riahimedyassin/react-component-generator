@@ -3,19 +3,20 @@ package component_generator
 import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
-	"github.com/riahimedyassin/react-component-generator/lib/files"
+	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
+	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 )
 
 // genereate styling files
-type StyleGenerator struct {
+type styleGenerator struct {
 	name    string
 	path    string
 	config  *config.Config
 	options *FlagsOptions
 }
 
-func NewStyleGenerator(name, path string, config *config.Config, options *FlagsOptions) *StyleGenerator {
-	return &StyleGenerator{
+func newStyleGenerator(name, path string, config *config.Config, options *FlagsOptions) *styleGenerator {
+	return &styleGenerator{
 		name:    name,
 		path:    path,
 		config:  config,
@@ -23,21 +24,18 @@ func NewStyleGenerator(name, path string, config *config.Config, options *FlagsO
 	}
 }
 
-func (g *StyleGenerator) Generate() error {
+func (g *styleGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	switch g.config.Project.Styling {
 	case enums.NONE, enums.TAILWIND:
-		return nil
+		return nil, rg_errors.NewIgnoreDefinerError()
 	}
 	if g.config.Component.WithStyling {
-		extension := g.getStyleExtension()
-		if err := files.WriteFile(g.path, g.name, extension, ""); err != nil {
-			return err
-		}
+		return generator.NewFileSpec(g.name, g.path, g.getStyleExtension(), ""), nil
 	}
-	return nil
+	return nil, rg_errors.NewIgnoreDefinerError()
 }
 
-func (g *StyleGenerator) getStyleExtension() string {
+func (g *styleGenerator) getStyleExtension() string {
 	extensions := map[enums.Styling]string{
 		enums.SCSS: "scss",
 		enums.CSS:  "css",
