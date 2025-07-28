@@ -9,36 +9,30 @@ import (
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 )
 
-type HookFileSpecGenerator struct {
-	name     string
-	path     string
-	config   *config.Config
-	options  *FlagsOptions
-	testFile *HookTestGenerator
+type hookFileSpecGenerator struct {
+	name    string
+	path    string
+	config  *config.Config
+	options *FlagsOptions
 }
 
-func NewHookFileSpecGenerator(
+func newHookFileSpecGenerator(
 	name string,
 	path string,
 	config *config.Config,
 	options *FlagsOptions,
-	testFile *HookTestGenerator,
-) *HookFileSpecGenerator {
-	return &HookFileSpecGenerator{
-		name:     name,
-		path:     path,
-		config:   config,
-		options:  options,
-		testFile: testFile,
+) *hookFileSpecGenerator {
+	return &hookFileSpecGenerator{
+		name:    name,
+		path:    path,
+		config:  config,
+		options: options,
 	}
 }
 
-func (g *HookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (g *hookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	content, err := g.generateContent()
 	if err != nil {
-		return nil, err
-	}
-	if err := g.testFile.Generate(); err != nil {
 		return nil, err
 	}
 	fileSpec := &generator.FileSpec{
@@ -50,7 +44,7 @@ func (g *HookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	return fileSpec, nil
 }
 
-func (g *HookFileSpecGenerator) generateContent() (string, error) {
+func (g *hookFileSpecGenerator) generateContent() (string, error) {
 	res := ""
 	template, err := g.getTemplate()
 	if err != nil {
@@ -60,7 +54,7 @@ func (g *HookFileSpecGenerator) generateContent() (string, error) {
 	return res, nil
 }
 
-func (g *HookFileSpecGenerator) getTemplate() (string, error) {
+func (g *hookFileSpecGenerator) getTemplate() (string, error) {
 	template, err := files.ReadFile(config.HOOK_TEMPLATE_PATH)
 	if err != nil {
 		return "", err
@@ -68,7 +62,7 @@ func (g *HookFileSpecGenerator) getTemplate() (string, error) {
 	return string(template), nil
 }
 
-func (g *HookFileSpecGenerator) getExtension() string {
+func (g *hookFileSpecGenerator) getExtension() string {
 	if g.config.Project.Base == enums.JAVASCRIPT {
 		return "js"
 	}

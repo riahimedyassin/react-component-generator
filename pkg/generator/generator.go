@@ -18,13 +18,14 @@ func NewGenerator() *Generator {
 	return &Generator{}
 }
 
-func (g *Generator) Generate(filesSpecs ...FileSpecDefiner) error {
+func (g *Generator) Generate(wrapper Wrapper) error {
+	fileSpecDefs := wrapper.GetDefiners()
 	doneFiles := lib.NewSafeSlice[FileSpec]() // Tracking the generated files to safely cleanup in case of an error.
-	errChan := make(chan error, len(filesSpecs))
+	errChan := make(chan error, len(fileSpecDefs))
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	var wg sync.WaitGroup
-	for _, f := range filesSpecs {
+	for _, f := range fileSpecDefs {
 		fileSpec, err := f.GetFileSpec()
 		if err != nil {
 			if errors.Is(err, &rg_errors.IgnoreDefinerError{}) {

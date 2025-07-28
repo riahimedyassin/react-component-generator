@@ -37,14 +37,7 @@ var generateHookCMD = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fileSpec := hooks_generator.NewHookFileSpecGenerator(
-			name, path, &config.GlobalConfig,
-			flags,
-			nil,
-		)
-		if err != nil {
-			return err
-		}
-		return generator.NewGenerator().Generate(fileSpec)
+		hookWrapper := hooks_generator.NewHookWrapper(name, path, &config.GlobalConfig, flags)
+		return generator.NewGenerator().Generate(hookWrapper)
 	},
 }

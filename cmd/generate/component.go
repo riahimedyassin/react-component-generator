@@ -50,8 +50,7 @@ var (
 				return err
 			}
 			compWrapper := component_generator.NewComponentWrapper(name, path, &config.GlobalConfig, flagsOptions)
-			fileSpecDefiners := compWrapper.GetDefiners()
-			return generator.NewGenerator().Generate(fileSpecDefiners...)
+			return generator.NewGenerator().Generate(compWrapper)
 		},
 	}
 )
