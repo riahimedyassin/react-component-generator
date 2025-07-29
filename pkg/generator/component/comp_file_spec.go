@@ -10,34 +10,35 @@ import (
 )
 
 type componentFileSpecGenerator struct {
-	name    string
-	path    string
-	config  *config.Config
-	options *FlagsOptions
+	name, path string
+	config     *config.Config
+	flags      *FlagsOptions
+	fs         *files.FileSystem
 }
 
-func newComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions) *componentFileSpecGenerator {
+func newComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions, fs *files.FileSystem) *componentFileSpecGenerator {
 	return &componentFileSpecGenerator{
-		name:    name,
-		config:  config,
-		options: options,
-		path:    path,
+		name:   name,
+		config: config,
+		flags:  options,
+		path:   path,
+		fs:     fs,
 	}
 }
 
 func (c *componentFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
-	content, err := c.generateContent()
+	template, err := c.getTemplate()
+	if err != nil {
+		return nil, err
+	}
+	content, err := c.generateContent(template)
 	if err != nil {
 		return nil, err
 	}
 	return generator.NewFileSpec(c.name, c.path, c.getExtension(), content), nil
 }
 
-func (c *componentFileSpecGenerator) generateContent() (string, error) {
-	template, err := c.getTemplate()
-	if err != nil {
-		return "", err
-	}
+func (c *componentFileSpecGenerator) generateContent(template string) (string, error) {
 	var parsedTemplate string
 	defaultedExport := "" // default export a component or nomral export.
 	params := ""
@@ -72,12 +73,12 @@ func (g *componentFileSpecGenerator) getExtension() string {
 
 func (g *componentFileSpecGenerator) getTemplate() (string, error) {
 	var path string
-	if g.options.ClassComponent || g.config.Component.Type == enums.CLASS {
+	if g.flags.ClassComponent || g.config.Component.Type == enums.CLASS {
 		path = config.CLASS_COMPONENT_TEMPLATE_PATH
 	} else {
 		path = config.FUNC_COMPONENT_TEMPLATE_PATH
 	}
-	content, err := files.ReadFile(path)
+	content, err := g.fs.ReadFile(path)
 	if err != nil {
 		return "", err
 	}

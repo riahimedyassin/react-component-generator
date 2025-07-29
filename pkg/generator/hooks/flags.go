@@ -7,7 +7,7 @@ type FlagsOptions struct {
 }
 
 func NewFlagOptions(cmd *cobra.Command) (*FlagsOptions, error) {
-	withTests, err := cmd.Flags().GetBool("t")
+	withTests, err := cmd.Flags().GetBool("test")
 	if err != nil {
 		return nil, err
 	}
@@ -15,3 +15,7 @@ func NewFlagOptions(cmd *cobra.Command) (*FlagsOptions, error) {
 		WithTests: withTests,
 	}, nil
 }
+
+/*
+todo : hook file name , validation of name, transformation of name.
+*/

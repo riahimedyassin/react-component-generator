@@ -12,10 +12,13 @@ import (
 
 // Responsible for file generation
 type Generator struct {
+	fs *files.FileSystem
 }
 
 func NewGenerator() *Generator {
-	return &Generator{}
+	return &Generator{
+		fs: files.NewFileSystem(),
+	}
 }
 
 func (g *Generator) Generate(wrapper Wrapper) error {
@@ -26,6 +29,7 @@ func (g *Generator) Generate(wrapper Wrapper) error {
 	defer cancel()
 	var wg sync.WaitGroup
 	for _, f := range fileSpecDefs {
+		// todo : move in withing a goroutine
 		fileSpec, err := f.GetFileSpec()
 		if err != nil {
 			if errors.Is(err, &rg_errors.IgnoreDefinerError{}) {
@@ -41,7 +45,7 @@ func (g *Generator) Generate(wrapper Wrapper) error {
 			case <-ctx.Done():
 				return
 			default:
-				if err := files.WriteFile(fileSpec.Path, fileSpec.Name, fileSpec.Extension, fileSpec.Content); err != nil {
+				if err := g.fs.WriteFile(fileSpec.Path, fileSpec.Name, fileSpec.Extension, fileSpec.Content); err != nil {
 					errChan <- err
 					cancel()
 					return

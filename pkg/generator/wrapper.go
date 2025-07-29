@@ -2,5 +2,7 @@ package generator
 
 // Wrapper is an interface for generation structs.
 type Wrapper interface {
+	// GetDefiners will let you get the file specs noted returned by struct implementing the FileSpecDefiner interface.
+	// The GetDefiners function will get those definers based on the configuration and the flags passed in.
 	GetDefiners() []FileSpecDefiner
 }

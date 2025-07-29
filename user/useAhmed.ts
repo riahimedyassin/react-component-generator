@@ -1,6 +1,6 @@
 import {useState} from "react"
 
-export const {{HOOK_NAME}} = () => {
+export const useAhmed = () => {
     const [name,setName] = useState("")
 
 

@@ -9,3 +9,9 @@ func GetTemplatePath(template string) string {
 	// exeDir := filepath.Dir(exePath)
 	return filepath.Join("./templates", template)
 }
+
+func GetNameAndPath(fullPath string) (name, path string) {
+	name = filepath.Base(fullPath)
+	path = filepath.Dir(fullPath)
+	return
+}

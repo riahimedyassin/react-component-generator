@@ -1,9 +1,12 @@
 package hooks_generator
 
 import (
+	"strings"
+
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
+	"github.com/riahimedyassin/react-component-generator/lib/files"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 )
 
@@ -12,21 +15,27 @@ type hookTestGenerator struct {
 	path    string
 	config  *config.Config
 	options *FlagsOptions
+	fs      *files.FileSystem
 }
 
-func newHookTestGenerator(name, path string, config *config.Config, options *FlagsOptions) *hookTestGenerator {
+func newHookTestGenerator(name, path string, config *config.Config, options *FlagsOptions, fs *files.FileSystem) *hookTestGenerator {
 	return &hookTestGenerator{
 		name:    name,
 		path:    path,
 		config:  config,
 		options: options,
+		fs:      fs,
 	}
 }
 
-// todo : spec file content
 func (g *hookTestGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	if g.config.Component.WithTest {
-		return generator.NewFileSpec(g.name, g.path, g.getExtension(), ""), nil
+		template, err := g.getTemplate()
+		if err != nil {
+			return nil, err
+		}
+		content := g.generateContent(template)
+		return generator.NewFileSpec(g.name, g.path, g.getExtension(), content), nil
 	}
 	return nil, rg_errors.NewIgnoreDefinerError()
 }
@@ -36,4 +45,16 @@ func (g *hookTestGenerator) getExtension() string {
 		return "spec.ts"
 	}
 	return "spec.js"
+}
+
+func (g *hookTestGenerator) getTemplate() (string, error) {
+	content, err := g.fs.ReadFile(config.HOOK_TEST_TEMPLATE_PATH)
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
+}
+
+func (g *hookTestGenerator) generateContent(template string) string {
+	return strings.ReplaceAll(template, string(HOOK_NAME), g.name)
 }

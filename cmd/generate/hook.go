@@ -37,7 +37,16 @@ var generateHookCMD = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		hookWrapper := hooks_generator.NewHookWrapper(name, path, &config.GlobalConfig, flags)
+		transformer := hooks_generator.NewHookTransformer(name, path, flags, &config.GlobalConfig)
+		transformedValues, err := transformer.GetTransformed()
+		if err != nil {
+			return err
+		}
+		hookWrapper := hooks_generator.NewHookWrapper(transformedValues.HookName, path, &config.GlobalConfig, flags)
 		return generator.NewGenerator().Generate(hookWrapper)
 	},
+}
+
+func init() {
+	generateHookCMD.Flags().BoolP("test", "t", config.GlobalConfig.Hooks.WithTest, "include tests")
 }

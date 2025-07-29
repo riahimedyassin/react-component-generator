@@ -2,6 +2,7 @@ package component_generator
 
 import (
 	"github.com/riahimedyassin/react-component-generator/config"
+	"github.com/riahimedyassin/react-component-generator/lib/files"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 )
 
@@ -26,7 +27,7 @@ func NewComponentWrapper(
 
 func (c *ComponentWrapper) GetDefiners() []generator.FileSpecDefiner {
 	definers := []generator.FileSpecDefiner{
-		newComponentFileSpecGenerator(c.name, c.path, c.config, c.flags),
+		newComponentFileSpecGenerator(c.name, c.path, c.config, c.flags, files.NewFileSystem()),
 	}
 	if c.config.Component.WithStyling {
 		definers = append(definers, newStyleGenerator(c.name, c.path, c.config, c.flags))

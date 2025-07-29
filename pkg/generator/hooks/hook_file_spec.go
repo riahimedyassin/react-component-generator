@@ -14,6 +14,7 @@ type hookFileSpecGenerator struct {
 	path    string
 	config  *config.Config
 	options *FlagsOptions
+	fs      *files.FileSystem
 }
 
 func newHookFileSpecGenerator(
@@ -21,17 +22,23 @@ func newHookFileSpecGenerator(
 	path string,
 	config *config.Config,
 	options *FlagsOptions,
+	fs *files.FileSystem,
 ) *hookFileSpecGenerator {
 	return &hookFileSpecGenerator{
 		name:    name,
 		path:    path,
 		config:  config,
 		options: options,
+		fs:      fs,
 	}
 }
 
 func (g *hookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
-	content, err := g.generateContent()
+	template, err := g.getTemplate()
+	if err != nil {
+		return nil, err
+	}
+	content, err := g.generateContent(template)
 	if err != nil {
 		return nil, err
 	}
@@ -44,18 +51,12 @@ func (g *hookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	return fileSpec, nil
 }
 
-func (g *hookFileSpecGenerator) generateContent() (string, error) {
-	res := ""
-	template, err := g.getTemplate()
-	if err != nil {
-		return "", err
-	}
-	res = strings.Replace(template, string(HOOK_NAME), g.name, 1)
-	return res, nil
+func (g *hookFileSpecGenerator) generateContent(template string) (string, error) {
+	return strings.Replace(template, string(HOOK_NAME), g.name, 1), nil
 }
 
 func (g *hookFileSpecGenerator) getTemplate() (string, error) {
-	template, err := files.ReadFile(config.HOOK_TEMPLATE_PATH)
+	template, err := g.fs.ReadFile(config.HOOK_TEMPLATE_PATH)
 	if err != nil {
 		return "", err
 	}
@@ -76,6 +77,6 @@ refineHookName takes a given name and refactor it if needed based on those const
 - First letter after use if upper case (useauth -> useAuth)
 - should be a valid name ()
 */
-func refineHookName(name string) {
+// func refineHookName(name string) {
 
-}
+// }
