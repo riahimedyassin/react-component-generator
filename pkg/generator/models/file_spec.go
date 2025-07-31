@@ -1,9 +1,5 @@
 package generator_models
 
-type FileSpecDefiner interface {
-	GetFileSpec() (*FileSpec, error)
-}
-
 type FileSpec struct {
 	Name      string
 	Content   string
