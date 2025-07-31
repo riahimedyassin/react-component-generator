@@ -4,7 +4,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 // genereate styling files
@@ -24,13 +24,13 @@ func newStyleGenerator(name, path string, config *config.Config, options *FlagsO
 	}
 }
 
-func (g *styleGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (g *styleGenerator) GetFileSpec() (*generator_models.FileSpec, error) {
 	switch g.config.Project.Styling {
 	case enums.NONE, enums.TAILWIND:
 		return nil, rg_errors.NewIgnoreDefinerError()
 	}
 	if g.config.Component.WithStyling {
-		return generator.NewFileSpec(g.name, g.path, g.getStyleExtension(), ""), nil
+		return generator_models.NewFileSpec(g.name, g.path, g.getStyleExtension(), ""), nil
 	}
 	return nil, rg_errors.NewIgnoreDefinerError()
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 type hookTestGenerator struct {
@@ -28,14 +28,14 @@ func newHookTestGenerator(name, path string, config *config.Config, options *Fla
 	}
 }
 
-func (g *hookTestGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (g *hookTestGenerator) GetFileSpec() (*generator_models.FileSpec, error) {
 	if g.config.Component.WithTest {
 		template, err := g.getTemplate()
 		if err != nil {
 			return nil, err
 		}
 		content := g.generateContent(template)
-		return generator.NewFileSpec(g.name, g.path, g.getExtension(), content), nil
+		return generator_models.NewFileSpec(g.name, g.path, g.getExtension(), content), nil
 	}
 	return nil, rg_errors.NewIgnoreDefinerError()
 }

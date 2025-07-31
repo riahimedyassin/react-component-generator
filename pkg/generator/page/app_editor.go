@@ -8,7 +8,7 @@ import (
 
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 // Responsible for editing app tsx or the routing file.
@@ -33,7 +33,7 @@ func NewAppEditor(pageName, pagePath string,
 	}
 }
 
-func (e *AppEditor) GetEditFileSpec() (*generator.EditFileSpec, error) {
+func (e *AppEditor) GetEditFileSpec() (*generator_models.EditFileSpec, error) {
 	routes, err := e.getRouteConfig()
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (e *AppEditor) GetEditFileSpec() (*generator.EditFileSpec, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &generator.EditFileSpec{
+	return &generator_models.EditFileSpec{
 		Name:           e.appName,
 		Path:           "./",
 		NewContent:     content,

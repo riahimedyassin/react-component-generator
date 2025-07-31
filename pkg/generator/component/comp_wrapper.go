@@ -3,7 +3,7 @@ package component_generator
 import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
 )
 
 type ComponentWrapper struct {
@@ -25,8 +25,8 @@ func NewComponentWrapper(
 	}
 }
 
-func (c *ComponentWrapper) GetDefiners() []generator.FileSpecDefiner {
-	definers := []generator.FileSpecDefiner{
+func (c *ComponentWrapper) GetDefiners() []generator_interfaces.FileSpecDefiner {
+	definers := []generator_interfaces.FileSpecDefiner{
 		newComponentFileSpecGenerator(c.name, c.path, c.config, c.flags, files.NewFileSystem()),
 	}
 	if c.config.Component.WithStyling {
@@ -38,6 +38,6 @@ func (c *ComponentWrapper) GetDefiners() []generator.FileSpecDefiner {
 	return definers
 }
 
-func (h *ComponentWrapper) GetEditors() []generator.Editor {
+func (h *ComponentWrapper) GetEditors() []generator_interfaces.Editor {
 	return nil
 }

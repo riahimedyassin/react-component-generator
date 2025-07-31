@@ -6,7 +6,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 type hookFileSpecGenerator struct {
@@ -33,7 +33,7 @@ func newHookFileSpecGenerator(
 	}
 }
 
-func (g *hookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (g *hookFileSpecGenerator) GetFileSpec() (*generator_models.FileSpec, error) {
 	template, err := g.getTemplate()
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (g *hookFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
 	if err != nil {
 		return nil, err
 	}
-	fileSpec := &generator.FileSpec{
+	fileSpec := &generator_models.FileSpec{
 		Name:      g.name,
 		Content:   content,
 		Path:      g.path,

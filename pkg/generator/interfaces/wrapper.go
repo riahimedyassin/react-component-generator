@@ -1,4 +1,4 @@
-package generator
+package generator_interfaces
 
 // Wrapper is an interface for generation structs.
 type Wrapper interface {

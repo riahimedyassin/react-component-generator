@@ -6,7 +6,7 @@ import (
 
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 // Responsible for editing the route config file
@@ -30,7 +30,7 @@ func NewRouteEditor(
 	}
 }
 
-func (e *RouteEditor) GetEditFileSpec() (*generator.EditFileSpec, error) {
+func (e *RouteEditor) GetEditFileSpec() (*generator_models.EditFileSpec, error) {
 	routes, err := e.getRouteConfig()
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (e *RouteEditor) GetEditFileSpec() (*generator.EditFileSpec, error) {
 	if err != nil {
 		return nil, err
 	}
-	return generator.NewEditFileSpec("rg.route", ".rcg", "json", content, snapshot), nil
+	return generator_models.NewEditFileSpec("rg.route", ".rcg", "json", content, snapshot), nil
 }
 
 func (e *RouteEditor) getRouteConfig() ([]RouteElement, error) {

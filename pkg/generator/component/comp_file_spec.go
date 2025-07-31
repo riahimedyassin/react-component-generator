@@ -6,7 +6,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 type componentFileSpecGenerator struct {
@@ -26,7 +26,7 @@ func newComponentFileSpecGenerator(name, path string, config *config.Config, opt
 	}
 }
 
-func (c *componentFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (c *componentFileSpecGenerator) GetFileSpec() (*generator_models.FileSpec, error) {
 	template, err := c.getTemplate()
 	if err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ func (c *componentFileSpecGenerator) GetFileSpec() (*generator.FileSpec, error) 
 	if err != nil {
 		return nil, err
 	}
-	return generator.NewFileSpec(c.name, c.path, c.getExtension(), content), nil
+	return generator_models.NewFileSpec(c.name, c.path, c.getExtension(), content), nil
 }
 
 func (c *componentFileSpecGenerator) generateContent(template string) (string, error) {

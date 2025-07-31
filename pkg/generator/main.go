@@ -9,6 +9,8 @@ import (
 	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
 	"github.com/riahimedyassin/react-component-generator/lib"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
+	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 // Responsible for file generation
@@ -23,7 +25,7 @@ func NewGenerator() *Generator {
 }
 
 // Entry point.
-func (g *Generator) Process(wrapper Wrapper) error {
+func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	errChan := make(chan error, 10) // Buffered channel
 	var pwg sync.WaitGroup
@@ -55,7 +57,7 @@ func (g *Generator) Process(wrapper Wrapper) error {
 	}
 	return nil
 }
-func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper Wrapper) error {
+func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper generator_interfaces.Wrapper) error {
 	editors := wrapper.GetEditors()
 	var wg sync.WaitGroup
 	ctx, cancel := context.WithCancel(pctx)
@@ -66,7 +68,7 @@ func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper Wrapp
 			return err
 		}
 		wg.Add(1)
-		go func(e *EditFileSpec) {
+		go func(e *generator_models.EditFileSpec) {
 			select {
 			case <-ctx.Done():
 				return
@@ -93,9 +95,9 @@ func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper Wrapp
 	}
 }
 
-func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper Wrapper) error {
+func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper generator_interfaces.Wrapper) error {
 	fileSpecDefs := wrapper.GetDefiners()
-	doneFiles := lib.NewSafeSlice[FileSpec]() // Tracking the generated files to safely cleanup in case of an error.
+	doneFiles := lib.NewSafeSlice[generator_models.FileSpec]() // Tracking the generated files to safely cleanup in case of an error.
 	ctx, cancel := context.WithCancel(pctx)
 	defer cancel()
 	var wg sync.WaitGroup
@@ -110,7 +112,7 @@ func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper W
 			return err
 		}
 		wg.Add(1)
-		go func(fileSpec FileSpec) {
+		go func(fileSpec generator_models.FileSpec) {
 			defer wg.Done()
 			select {
 			case <-ctx.Done():
@@ -139,6 +141,6 @@ func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper W
 
 // TODO : Implement
 // in case of an error the function will rollback the created files to keep a clean project structure
-func (g *Generator) cleanUp(files []FileSpec) {
+func (g *Generator) cleanUp(files []generator_models.FileSpec) {
 
 }

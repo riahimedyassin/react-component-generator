@@ -1,4 +1,4 @@
-package generator
+package generator_models
 
 type FileSpecDefiner interface {
 	GetFileSpec() (*FileSpec, error)

@@ -4,7 +4,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 type testGenerator struct {
@@ -24,9 +24,9 @@ func newTestGenerator(name, path string, config *config.Config, options *FlagsOp
 }
 
 // todo :  generate testing content
-func (g *testGenerator) GetFileSpec() (*generator.FileSpec, error) {
+func (g *testGenerator) GetFileSpec() (*generator_models.FileSpec, error) {
 	if g.config.Component.WithTest {
-		return generator.NewFileSpec(g.name, g.path, g.getExtension(), ""), nil
+		return generator_models.NewFileSpec(g.name, g.path, g.getExtension(), ""), nil
 	}
 	return nil, rg_errors.NewIgnoreDefinerError()
 }

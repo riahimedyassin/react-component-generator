@@ -1,9 +1,4 @@
-package generator
-
-// an editor should implement this interface.
-type Editor interface {
-	GetEditFileSpec() (*EditFileSpec, error)
-}
+package generator_models
 
 // defines editable files.
 type EditFileSpec struct {

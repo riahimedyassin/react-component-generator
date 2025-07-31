@@ -3,7 +3,7 @@ package hooks_generator
 import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
-	"github.com/riahimedyassin/react-component-generator/pkg/generator"
+	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
 )
 
 type HookWrapper struct {
@@ -27,9 +27,9 @@ func NewHookWrapper(
 	}
 }
 
-func (h *HookWrapper) GetDefiners() []generator.FileSpecDefiner {
+func (h *HookWrapper) GetDefiners() []generator_interfaces.FileSpecDefiner {
 	fs := files.NewFileSystem()
-	definers := []generator.FileSpecDefiner{
+	definers := []generator_interfaces.FileSpecDefiner{
 		newHookFileSpecGenerator(h.name, h.path, h.config, h.flags, fs),
 	}
 	if h.flags.WithTests {
@@ -38,6 +38,6 @@ func (h *HookWrapper) GetDefiners() []generator.FileSpecDefiner {
 	return definers
 }
 
-func (h *HookWrapper) GetEditors() []generator.Editor {
+func (h *HookWrapper) GetEditors() []generator_interfaces.Editor {
 	return nil
 }
