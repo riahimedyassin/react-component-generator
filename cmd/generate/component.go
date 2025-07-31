@@ -50,7 +50,7 @@ var (
 				return err
 			}
 			compWrapper := component_generator.NewComponentWrapper(name, path, &config.GlobalConfig, flagsOptions)
-			return generator.NewGenerator().Generate(compWrapper)
+			return generator.NewGenerator().Process(compWrapper)
 		},
 	}
 )

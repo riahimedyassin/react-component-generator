@@ -1,6 +1,10 @@
 package config
 
 import (
+	"fmt"
+	"path"
+	"path/filepath"
+
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	"github.com/spf13/viper"
 )
@@ -8,15 +12,16 @@ import (
 var (
 	GlobalConfig Config // Global app configuration
 	defaults     = map[ConfigTokens]any{
-		DEFAULT_EXPORT:    false,
-		PROJECT_BASE:      enums.TYPESCRIPT,
-		PROJECT_STRUCTURE: "feature-based",
-		STYLING:           enums.CSS,
-		TEST:              false,
-		TYPE:              enums.FUNCTIONAL,
-		WITH_STYLING:      false,
-		WITH_TEST:         false,
-		WITH_HOOK_TEST:    true,
+		DEFAULT_EXPORT:             false,
+		PROJECT_BASE:               enums.TYPESCRIPT,
+		PROJECT_STRUCTURE:          "feature-based",
+		STYLING:                    enums.CSS,
+		TEST:                       false,
+		TYPE:                       enums.FUNCTIONAL,
+		WITH_STYLING:               false,
+		WITH_TEST:                  false,
+		WITH_HOOK_TEST:             true,
+		PROJECT_ROUTING_ENTRY_FILE: "app",
 	}
 )
 
@@ -29,7 +34,8 @@ func setDefaults() {
 // Called after
 func Load(cwd string) error {
 	setDefaults()
-	viper.AddConfigPath(cwd)
+	viper.AddConfigPath(filepath.Join(cwd, ".rcg"))
+	fmt.Print(path.Join(cwd, ".rcg"))
 	viper.SetConfigName("rg.config")
 	viper.SetConfigType("json")
 
@@ -42,4 +48,11 @@ func Load(cwd string) error {
 		return err
 	}
 	return viper.Unmarshal(&GlobalConfig)
+}
+
+func (c *Config) GetProjectFileExtension() string {
+	if c.Project.Base == enums.JAVASCRIPT {
+		return "js"
+	}
+	return "ts"
 }

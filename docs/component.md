@@ -30,3 +30,8 @@ Chosing to implement a migration strategy is not decided yet. This could be impl
 ```bash
 rg g c [name] -s -c
 ```
+
+## Pages and routing
+
+If you want to add a route to your project you should pass by the CLI command line for better integrity.
+This will allow the CLI to update the *rg.route.json* config file and keep your project in sync with the CLI.

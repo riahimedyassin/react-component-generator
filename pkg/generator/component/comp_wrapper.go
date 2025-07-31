@@ -37,3 +37,7 @@ func (c *ComponentWrapper) GetDefiners() []generator.FileSpecDefiner {
 	}
 	return definers
 }
+
+func (h *ComponentWrapper) GetEditors() []generator.Editor {
+	return nil
+}

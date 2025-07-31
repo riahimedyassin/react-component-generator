@@ -37,3 +37,7 @@ func (h *HookWrapper) GetDefiners() []generator.FileSpecDefiner {
 	}
 	return definers
 }
+
+func (h *HookWrapper) GetEditors() []generator.Editor {
+	return nil
+}

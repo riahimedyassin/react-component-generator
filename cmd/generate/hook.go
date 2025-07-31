@@ -43,7 +43,7 @@ var generateHookCMD = &cobra.Command{
 			return err
 		}
 		hookWrapper := hooks_generator.NewHookWrapper(transformedValues.HookName, path, &config.GlobalConfig, flags)
-		return generator.NewGenerator().Generate(hookWrapper)
+		return generator.NewGenerator().Process(hookWrapper)
 	},
 }
 

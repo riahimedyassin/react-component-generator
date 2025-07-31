@@ -14,6 +14,11 @@ type projectConfig struct {
 	Styling   enums.Styling
 	Base      enums.ProjectBase
 	Structure string
+	Routing   routingConfig
+}
+
+type routingConfig struct {
+	EntryFile string
 }
 
 type hooksConfig struct {

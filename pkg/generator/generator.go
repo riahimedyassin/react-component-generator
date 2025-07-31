@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"sync"
+	"time"
 
 	rg_errors "github.com/riahimedyassin/react-component-generator/errors"
 	"github.com/riahimedyassin/react-component-generator/lib"
@@ -21,11 +22,81 @@ func NewGenerator() *Generator {
 	}
 }
 
-func (g *Generator) Generate(wrapper Wrapper) error {
+// Entry point.
+func (g *Generator) Process(wrapper Wrapper) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	errChan := make(chan error, 10) // Buffered channel
+	var pwg sync.WaitGroup
+
+	pwg.Add(2)
+	go func() {
+		defer pwg.Done()
+		if err := g.edit(ctx, errChan, wrapper); err != nil {
+			errChan <- err
+			cancel()
+		}
+	}()
+
+	go func() {
+		defer pwg.Done()
+		if err := g.generate(ctx, errChan, wrapper); err != nil {
+			errChan <- err
+			cancel()
+		}
+	}()
+
+	pwg.Wait()
+	cancel()
+	close(errChan) // Close channel after all goroutines complete
+
+	// Collect all errors
+	if err := <-errChan; err != nil {
+		return err
+	}
+	return nil
+}
+func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper Wrapper) error {
+	editors := wrapper.GetEditors()
+	var wg sync.WaitGroup
+	ctx, cancel := context.WithCancel(pctx)
+	defer cancel()
+	for _, editor := range editors {
+		editFilesSpecs, err := editor.GetEditFileSpec()
+		if err != nil {
+			return err
+		}
+		wg.Add(1)
+		go func(e *EditFileSpec) {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				defer wg.Done()
+				if err := g.fs.WriteFile(e.Path, e.Name, e.Extension, e.NewContent); err != nil {
+					errChan <- err
+					cancel()
+					return
+				}
+			}
+
+		}(editFilesSpecs)
+	}
+	wg.Wait()
+
+	select {
+	case err := <-errChan:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return nil
+	}
+}
+
+func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper Wrapper) error {
 	fileSpecDefs := wrapper.GetDefiners()
 	doneFiles := lib.NewSafeSlice[FileSpec]() // Tracking the generated files to safely cleanup in case of an error.
-	errChan := make(chan error, len(fileSpecDefs))
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(pctx)
 	defer cancel()
 	var wg sync.WaitGroup
 	for _, f := range fileSpecDefs {
@@ -59,6 +130,8 @@ func (g *Generator) Generate(wrapper Wrapper) error {
 	case err := <-errChan:
 		g.cleanUp(doneFiles.GetAll())
 		return err
+	case <-ctx.Done():
+		return ctx.Err()
 	default:
 		return nil
 	}

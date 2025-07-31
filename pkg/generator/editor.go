@@ -1,14 +1,17 @@
 package generator
 
+// an editor should implement this interface.
 type Editor interface {
-	GetEditSpecs() (*EditFileSpec, error)
+	GetEditFileSpec() (*EditFileSpec, error)
 }
 
+// defines editable files.
 type EditFileSpec struct {
-	Name       string
-	Path       string
-	Extension  string
-	NewContent string
+	Name           string
+	Path           string
+	Extension      string
+	NewContent     string
+	CurrentContent string
 }
 
 func NewEditFileSpec(
@@ -16,11 +19,13 @@ func NewEditFileSpec(
 	Path string,
 	Extension string,
 	NewContent string,
+	CurrentContent string,
 ) *EditFileSpec {
 	return &EditFileSpec{
-		Name:       Name,
-		Path:       Path,
-		Extension:  Extension,
-		NewContent: NewContent,
+		Name:           Name,
+		Path:           Path,
+		Extension:      Extension,
+		NewContent:     NewContent,
+		CurrentContent: CurrentContent,
 	}
 }
