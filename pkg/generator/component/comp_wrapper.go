@@ -4,6 +4,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/lib/files"
 	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
 	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
+	generator_shared "github.com/riahimedyassin/react-component-generator/pkg/generator/shared"
 )
 
 type ComponentWrapper struct {
@@ -36,7 +37,8 @@ func (h *ComponentWrapper) GetEditors() []generator_interfaces.Editor {
 }
 
 func (h *ComponentWrapper) GetValidators() []generator_interfaces.Validator {
+	sharedValidator := generator_shared.NewSharedValidator()
 	return []generator_interfaces.Validator{
-		newComponentValidator(h.execContent),
+		newComponentValidator(h.execContent, sharedValidator),
 	}
 }

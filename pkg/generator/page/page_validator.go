@@ -4,29 +4,31 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-	"unicode"
 
+	"github.com/riahimedyassin/react-component-generator/constants"
 	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
+	generator_shared "github.com/riahimedyassin/react-component-generator/pkg/generator/shared"
 )
 
 type pageValidator struct {
-	execContext   *generator_models.ExecContenxt[FlagsOptions]
-	maxNameLength int
+	execContext     *generator_models.ExecContenxt[FlagsOptions]
+	sharedValidator *generator_shared.SharedValidator
 }
 
 func newPageValidator(
 	execContext *generator_models.ExecContenxt[FlagsOptions],
+	sharedValidator *generator_shared.SharedValidator,
 ) *pageValidator {
 	return &pageValidator{
-		execContext:   execContext,
-		maxNameLength: 80,
+		execContext:     execContext,
+		sharedValidator: sharedValidator,
 	}
 }
 
 func (v *pageValidator) Validate() []error {
 	errors := []error{}
 
-	if err := v.validateLength(); err != nil {
+	if err := v.sharedValidator.IsValidateLength(v.execContext.Filename, 1, constants.FILE_NAME_MAX_LENGTH); err != nil {
 		errors = append(errors, err)
 	}
 
@@ -34,7 +36,7 @@ func (v *pageValidator) Validate() []error {
 		errors = append(errors, err)
 	}
 
-	if err := v.validateFormat(); err != nil {
+	if err := v.sharedValidator.IsValidReactFileFormat(v.execContext.Filename); err != nil {
 		errors = append(errors, err)
 	}
 
@@ -45,63 +47,14 @@ func (v *pageValidator) Validate() []error {
 	return errors
 }
 
-func (v *pageValidator) validateLength() error {
-	length := len(v.execContext.Filename)
-	if length > v.maxNameLength {
-		return fmt.Errorf("page name too long: %d characters, enter a shorter page name", length)
-	}
-	if length == 0 {
-		return fmt.Errorf("page name cannot be empty")
-	}
-	return nil
-}
-
 func (v *pageValidator) validateName() error {
 	name := v.execContext.Filename
 
-	// Check if name contains only valid characters (alphanumeric, underscore)
-	validNameRegex := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*$`)
-	if !validNameRegex.MatchString(name) {
-		return fmt.Errorf("page name '%s' contains invalid characters. Use only letters, numbers, and underscores, starting with a letter", name)
+	if err := v.sharedValidator.IsAlphaNumeric(name); err != nil {
+		return err
 	}
 
-	// Check if first character is uppercase (PascalCase convention)
-	if !unicode.IsUpper(rune(name[0])) {
-		return fmt.Errorf("page name '%s' should start with an uppercase letter (PascalCase convention)", name)
-	}
-
-	return nil
-}
-
-func (v *pageValidator) validateFormat() error {
-	name := v.execContext.Filename
-
-	// Check for consecutive underscores
-	if strings.Contains(name, "__") {
-		return fmt.Errorf("page name '%s' should not contain consecutive underscores", name)
-	}
-
-	// Check if name ends with underscore
-	if strings.HasSuffix(name, "_") {
-		return fmt.Errorf("page name '%s' should not end with underscore", name)
-	}
-
-	// Check for numbers immediately after the first character
-	if len(name) > 1 && unicode.IsDigit(rune(name[1])) {
-		return fmt.Errorf("page name '%s' should not have numbers immediately after the first letter", name)
-	}
-
-	// Check for all uppercase names (should be PascalCase, not SCREAMING_SNAKE_CASE)
-	if strings.ToUpper(name) == name && len(name) > 1 {
-		return fmt.Errorf("page name '%s' should use PascalCase, not all uppercase", name)
-	}
-
-	// Check for camelCase instead of PascalCase
-	if len(name) > 0 && unicode.IsLower(rune(name[0])) {
-		return fmt.Errorf("page name '%s' should use PascalCase (start with uppercase letter)", name)
-	}
-
-	return nil
+	return v.sharedValidator.IsPascalCase(name)
 }
 
 func (v *pageValidator) validateRoute() error {

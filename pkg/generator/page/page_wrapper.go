@@ -4,6 +4,7 @@ import (
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
 	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
 	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
+	generator_shared "github.com/riahimedyassin/react-component-generator/pkg/generator/shared"
 )
 
 // The page and the component do not have any difference except for the route generation process. The seperation in this phase isn't justified, but in future realeases this could be helpfull to manage pages and components in seperate ways.
@@ -36,5 +37,6 @@ func (h *PageWrapper) GetEditors() []generator_interfaces.Editor {
 
 func (h *PageWrapper) GetValidators() []generator_interfaces.Validator {
 	compValidators := h.compWrapper.GetValidators()
-	return append(compValidators, newPageValidator(h.execContext))
+	sharedValidator := generator_shared.NewSharedValidator()
+	return append(compValidators, newPageValidator(h.execContext, sharedValidator))
 }
