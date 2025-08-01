@@ -10,26 +10,23 @@ import (
 )
 
 type hookFileSpecGenerator struct {
-	name    string
-	path    string
-	config  *config.Config
-	options *FlagsOptions
-	fs      *files.FileSystem
+	name   string
+	path   string
+	config *config.Config
+	flags  *FlagsOptions
+	fs     *files.FileSystem
 }
 
 func newHookFileSpecGenerator(
-	name string,
-	path string,
-	config *config.Config,
-	options *FlagsOptions,
+	execContext *generator_models.ExecContenxt[FlagsOptions],
 	fs *files.FileSystem,
 ) *hookFileSpecGenerator {
 	return &hookFileSpecGenerator{
-		name:    name,
-		path:    path,
-		config:  config,
-		options: options,
-		fs:      fs,
+		name:   execContext.Filename,
+		path:   execContext.Filepath,
+		config: execContext.Config,
+		flags:  &execContext.Flags,
+		fs:     fs,
 	}
 }
 

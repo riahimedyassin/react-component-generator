@@ -1,39 +1,32 @@
 package hooks_generator
 
 import (
-	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/lib/files"
 	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 type HookWrapper struct {
-	name, path string
-	config     *config.Config
-	flags      *FlagsOptions
-	fs         *files.FileSystem
+	execContext *generator_models.ExecContenxt[FlagsOptions]
+	fs          *files.FileSystem
 }
 
 func NewHookWrapper(
-	name, path string,
-	config *config.Config,
-	flags *FlagsOptions,
+	execContext *generator_models.ExecContenxt[FlagsOptions],
 ) *HookWrapper {
 	return &HookWrapper{
-		name:   name,
-		path:   path,
-		config: config,
-		flags:  flags,
-		fs:     files.NewFileSystem(),
+		execContext: execContext,
+		fs:          files.NewFileSystem(),
 	}
 }
 
 func (h *HookWrapper) GetDefiners() []generator_interfaces.FileSpecDefiner {
 	fs := files.NewFileSystem()
 	definers := []generator_interfaces.FileSpecDefiner{
-		newHookFileSpecGenerator(h.name, h.path, h.config, h.flags, fs),
+		newHookFileSpecGenerator(h.execContext, fs),
 	}
-	if h.flags.WithTests {
-		definers = append(definers, newHookTestGenerator(h.name, h.path, h.config, h.flags, fs))
+	if h.execContext.Flags.WithTests {
+		definers = append(definers, newHookTestGenerator(h.execContext, fs))
 	}
 	return definers
 }

@@ -18,15 +18,14 @@ type RouteEditor struct {
 }
 
 func NewRouteEditor(
-	name, path string,
-	config *config.Config,
-	flags *FlagsOptions,
+	execContext *generator_models.ExecContenxt[FlagsOptions],
 ) *RouteEditor {
 	return &RouteEditor{
-		name:   name,
-		path:   path,
-		config: config,
-		flags:  flags,
+		name:   execContext.Filename,
+		path:   execContext.Filepath,
+		config: execContext.Config,
+		flags:  &execContext.Flags,
+		fs:     files.NewFileSystem(),
 	}
 }
 

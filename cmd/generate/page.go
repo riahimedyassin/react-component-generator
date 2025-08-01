@@ -8,6 +8,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/lib"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 	page_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/page"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -41,8 +42,10 @@ var (
 			if err != nil {
 				return err
 			}
-			compWrapper := component_generator.NewComponentWrapper(name, path, &config.GlobalConfig, flags)
-			pageWrapper := page_generator.NewPageWrapper(compWrapper, name, path, &config.GlobalConfig, pageFlags)
+			compExecContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flags)
+			compWrapper := component_generator.NewComponentWrapper(compExecContext)
+			pageExecContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *pageFlags)
+			pageWrapper := page_generator.NewPageWrapper(compWrapper, pageExecContext)
 			return generator.NewGenerator().Process(pageWrapper)
 		},
 	}

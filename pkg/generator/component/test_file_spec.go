@@ -8,18 +8,18 @@ import (
 )
 
 type testGenerator struct {
-	name    string
-	path    string
-	config  *config.Config
-	options *FlagsOptions
+	name   string
+	path   string
+	config *config.Config
+	flags  *FlagsOptions
 }
 
-func newTestGenerator(name, path string, config *config.Config, options *FlagsOptions) *testGenerator {
+func newTestGenerator(execContent *generator_models.ExecContenxt[FlagsOptions]) *testGenerator {
 	return &testGenerator{
-		name:    name,
-		path:    path,
-		config:  config,
-		options: options,
+		name:   execContent.Filename,
+		path:   execContent.Filepath,
+		config: execContent.Config,
+		flags:  &execContent.Flags,
 	}
 }
 

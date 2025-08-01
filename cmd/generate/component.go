@@ -10,6 +10,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/lib"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -49,7 +50,8 @@ var (
 			if err != nil {
 				return err
 			}
-			compWrapper := component_generator.NewComponentWrapper(name, path, &config.GlobalConfig, flagsOptions)
+			execContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flagsOptions)
+			compWrapper := component_generator.NewComponentWrapper(execContext)
 			return generator.NewGenerator().Process(compWrapper)
 		},
 	}

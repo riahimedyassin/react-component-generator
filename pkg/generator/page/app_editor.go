@@ -20,15 +20,15 @@ type AppEditor struct {
 	fs                 *files.FileSystem
 }
 
-func NewAppEditor(pageName, pagePath string,
-	config *config.Config,
-	flags *FlagsOptions) *AppEditor {
+func NewAppEditor(
+	execContext *generator_models.ExecContenxt[FlagsOptions],
+) *AppEditor {
 	return &AppEditor{
-		appName:  config.Project.Routing.EntryFile,
-		pageName: pageName,
-		pagePath: pagePath,
-		config:   config,
-		flags:    flags,
+		appName:  execContext.Config.Project.Routing.EntryFile,
+		pageName: execContext.Filename,
+		pagePath: execContext.Filepath,
+		config:   execContext.Config,
+		flags:    &execContext.Flags,
 		fs:       files.NewFileSystem(),
 	}
 }

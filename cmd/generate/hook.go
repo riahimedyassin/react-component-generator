@@ -8,6 +8,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	hooks_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/hooks"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 	"github.com/spf13/cobra"
 )
 
@@ -37,12 +38,15 @@ var generateHookCMD = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		transformer := hooks_generator.NewHookTransformer(name, path, flags, &config.GlobalConfig)
+		execContent := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flags)
+		// Implement a transformer phase.
+		transformer := hooks_generator.NewHookTransformer(execContent)
 		transformedValues, err := transformer.GetTransformed()
 		if err != nil {
 			return err
 		}
-		hookWrapper := hooks_generator.NewHookWrapper(transformedValues.HookName, path, &config.GlobalConfig, flags)
+		execContent.Filename = transformedValues.HookName
+		hookWrapper := hooks_generator.NewHookWrapper(execContent)
 		return generator.NewGenerator().Process(hookWrapper)
 	},
 }

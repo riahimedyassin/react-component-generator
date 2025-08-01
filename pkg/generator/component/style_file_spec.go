@@ -9,18 +9,18 @@ import (
 
 // genereate styling files
 type styleGenerator struct {
-	name    string
-	path    string
-	config  *config.Config
-	options *FlagsOptions
+	name   string
+	path   string
+	config *config.Config
+	flags  *FlagsOptions
 }
 
-func newStyleGenerator(name, path string, config *config.Config, options *FlagsOptions) *styleGenerator {
+func newStyleGenerator(execContent *generator_models.ExecContenxt[FlagsOptions]) *styleGenerator {
 	return &styleGenerator{
-		name:    name,
-		path:    path,
-		config:  config,
-		options: options,
+		name:   execContent.Filename,
+		path:   execContent.Filepath,
+		config: execContent.Config,
+		flags:  &execContent.Flags,
 	}
 }
 

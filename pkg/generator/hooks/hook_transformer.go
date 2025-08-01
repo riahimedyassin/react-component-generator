@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/riahimedyassin/react-component-generator/config"
+	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
 )
 
 type hookTransformer struct {
@@ -12,14 +13,12 @@ type hookTransformer struct {
 	config     *config.Config
 }
 
-func NewHookTransformer(name, path string,
-	flags *FlagsOptions,
-	config *config.Config) *hookTransformer {
+func NewHookTransformer(execContext *generator_models.ExecContenxt[FlagsOptions]) *hookTransformer {
 	return &hookTransformer{
-		name:   name,
-		path:   path,
-		flags:  flags,
-		config: config,
+		name:   execContext.Filename,
+		path:   execContext.Filepath,
+		flags:  &execContext.Flags,
+		config: execContext.Config,
 	}
 }
 

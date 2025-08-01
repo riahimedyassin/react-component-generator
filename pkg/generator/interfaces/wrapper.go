@@ -7,4 +7,5 @@ type Wrapper interface {
 	GetDefiners() []FileSpecDefiner
 	// GetEditors will let your get the files that will be edited. The core will be responsible for managing and updating those files.
 	GetEditors() []Editor
+	// GetValidators() []Validator
 }

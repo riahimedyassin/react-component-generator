@@ -11,20 +11,20 @@ import (
 )
 
 type hookTestGenerator struct {
-	name    string
-	path    string
-	config  *config.Config
-	options *FlagsOptions
-	fs      *files.FileSystem
+	name   string
+	path   string
+	config *config.Config
+	flags  *FlagsOptions
+	fs     *files.FileSystem
 }
 
-func newHookTestGenerator(name, path string, config *config.Config, options *FlagsOptions, fs *files.FileSystem) *hookTestGenerator {
+func newHookTestGenerator(execContext *generator_models.ExecContenxt[FlagsOptions], fs *files.FileSystem) *hookTestGenerator {
 	return &hookTestGenerator{
-		name:    name,
-		path:    path,
-		config:  config,
-		options: options,
-		fs:      fs,
+		name:   execContext.Filename,
+		path:   execContext.Filepath,
+		config: execContext.Config,
+		flags:  &execContext.Flags,
+		fs:     fs,
 	}
 }
 

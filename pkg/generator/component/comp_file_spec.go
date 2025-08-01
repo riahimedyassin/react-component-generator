@@ -16,12 +16,12 @@ type componentFileSpecGenerator struct {
 	fs         *files.FileSystem
 }
 
-func newComponentFileSpecGenerator(name, path string, config *config.Config, options *FlagsOptions, fs *files.FileSystem) *componentFileSpecGenerator {
+func newComponentFileSpecGenerator(execContent *generator_models.ExecContenxt[FlagsOptions], fs *files.FileSystem) *componentFileSpecGenerator {
 	return &componentFileSpecGenerator{
-		name:   name,
-		config: config,
-		flags:  options,
-		path:   path,
+		name:   execContent.Filename,
+		config: execContent.Config,
+		flags:  &execContent.Flags,
+		path:   execContent.Filepath,
 		fs:     fs,
 	}
 }
