@@ -10,8 +10,13 @@ import (
 type FileSystem struct {
 }
 
+var fileSystem *FileSystem
+
 func NewFileSystem() *FileSystem {
-	return &FileSystem{}
+	if fileSystem == nil {
+		fileSystem = &FileSystem{}
+	}
+	return fileSystem
 }
 
 func (f *FileSystem) WriteFile(path, name, extension, content string) error {

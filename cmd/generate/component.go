@@ -21,8 +21,6 @@ var (
 	withStyling bool
 	withTest    bool
 )
-
-// todo : Add validation
 var (
 	generateCompCMD = &cobra.Command{
 		Use:   "c  [component name]",
@@ -51,6 +49,9 @@ var (
 				return err
 			}
 			execContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flagsOptions)
+
+			// Validate component before generation
+
 			compWrapper := component_generator.NewComponentWrapper(execContext)
 			return generator.NewGenerator().Process(compWrapper)
 		},

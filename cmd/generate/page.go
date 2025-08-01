@@ -43,8 +43,11 @@ var (
 				return err
 			}
 			compExecContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flags)
-			compWrapper := component_generator.NewComponentWrapper(compExecContext)
 			pageExecContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *pageFlags)
+
+			// Validate page before generation
+
+			compWrapper := component_generator.NewComponentWrapper(compExecContext)
 			pageWrapper := page_generator.NewPageWrapper(compWrapper, pageExecContext)
 			return generator.NewGenerator().Process(pageWrapper)
 		},

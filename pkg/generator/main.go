@@ -30,6 +30,10 @@ func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 	errChan := make(chan error, 10) // Buffered channel
 	var pwg sync.WaitGroup
 
+	if err := g.validate(wrapper); err != nil {
+		return err
+	}
+
 	pwg.Add(2)
 	go func() {
 		defer pwg.Done()
@@ -50,13 +54,22 @@ func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 	pwg.Wait()
 	cancel()
 	close(errChan) // Close channel after all goroutines complete
-
-	// Collect all errors
 	if err := <-errChan; err != nil {
 		return err
 	}
 	return nil
 }
+
+func (g *Generator) validate(wrapper generator_interfaces.Wrapper) error {
+	validators := wrapper.GetValidators()
+	for _, validator := range validators {
+		if err := validator.Validate(); err != nil {
+			return errors.Join(err...)
+		}
+	}
+	return nil
+}
+
 func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper generator_interfaces.Wrapper) error {
 	editors := wrapper.GetEditors()
 	var wg sync.WaitGroup

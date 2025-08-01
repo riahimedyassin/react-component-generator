@@ -40,16 +40,6 @@ var generateHookCMD = &cobra.Command{
 		}
 		execContent := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flags)
 
-		// Validation phase
-		validator := hooks_generator.NewHookValidator(execContent)
-		validationErrors := validator.Validate()
-		if len(validationErrors) > 0 {
-			for _, validationErr := range validationErrors {
-				fmt.Printf("Validation error: %s\n", validationErr.Error())
-			}
-			return fmt.Errorf("hook validation failed")
-		}
-
 		// Transformation phase
 		transformer := hooks_generator.NewHookTransformer(execContent)
 		transformedValues, err := transformer.GetTransformed()

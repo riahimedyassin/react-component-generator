@@ -34,3 +34,9 @@ func (c *ComponentWrapper) GetDefiners() []generator_interfaces.FileSpecDefiner 
 func (h *ComponentWrapper) GetEditors() []generator_interfaces.Editor {
 	return nil
 }
+
+func (h *ComponentWrapper) GetValidators() []generator_interfaces.Validator {
+	return []generator_interfaces.Validator{
+		newComponentValidator(h.execContent),
+	}
+}

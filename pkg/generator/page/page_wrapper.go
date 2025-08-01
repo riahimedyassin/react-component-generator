@@ -33,3 +33,8 @@ func (h *PageWrapper) GetEditors() []generator_interfaces.Editor {
 	}
 	return editors
 }
+
+func (h *PageWrapper) GetValidators() []generator_interfaces.Validator {
+	compValidators := h.compWrapper.GetValidators()
+	return append(compValidators, newPageValidator(h.execContext))
+}

@@ -34,3 +34,9 @@ func (h *HookWrapper) GetDefiners() []generator_interfaces.FileSpecDefiner {
 func (h *HookWrapper) GetEditors() []generator_interfaces.Editor {
 	return nil
 }
+
+func (h *HookWrapper) GetValidators() []generator_interfaces.Validator {
+	return []generator_interfaces.Validator{
+		newHookValidator(h.execContext),
+	}
+}

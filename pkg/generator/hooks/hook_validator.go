@@ -14,7 +14,7 @@ type hookValidator struct {
 	maxNameLength int
 }
 
-func NewHookValidator(
+func newHookValidator(
 	execContext *generator_models.ExecContenxt[FlagsOptions],
 ) *hookValidator {
 	return &hookValidator{
