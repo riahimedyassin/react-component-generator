@@ -24,3 +24,5 @@ func NewEditFileSpec(
 		CurrentContent: CurrentContent,
 	}
 }
+
+func (f *EditFileSpec) MarkGenFile() {}

@@ -1,6 +1,9 @@
 package page_generator
 
 import (
+	"sync"
+
+	"github.com/riahimedyassin/react-component-generator/lib/files"
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
 	generator_interfaces "github.com/riahimedyassin/react-component-generator/pkg/generator/interfaces"
 	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
@@ -11,15 +14,18 @@ import (
 type PageWrapper struct {
 	compWrapper *component_generator.ComponentWrapper
 	execContext *generator_models.ExecContenxt[FlagsOptions]
+	fs          *files.FileSystem
 }
 
 func NewPageWrapper(
 	compWrapper *component_generator.ComponentWrapper,
 	execContext *generator_models.ExecContenxt[FlagsOptions],
+	fs *files.FileSystem,
 ) *PageWrapper {
 	return &PageWrapper{
 		compWrapper: compWrapper,
 		execContext: execContext,
+		fs:          fs,
 	}
 }
 
@@ -39,4 +45,23 @@ func (h *PageWrapper) GetValidators() []generator_interfaces.Validator {
 	compValidators := h.compWrapper.GetValidators()
 	sharedValidator := generator_shared.NewSharedValidator()
 	return append(compValidators, newPageValidator(h.execContext, sharedValidator))
+}
+
+func (h *PageWrapper) GetCleanUpResult(files []generator_interfaces.GenFiles) error {
+	errChan := make(chan error, len(files))
+	defer close(errChan)
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		errChan <- h.compWrapper.GetCleanUpResult(files)
+	}()
+
+	go func() {
+		defer wg.Done()
+		errChan <- newPageCleanUp(h.fs).CleanUp(files)
+	}()
+
+	wg.Wait()
+	return <-errChan
 }

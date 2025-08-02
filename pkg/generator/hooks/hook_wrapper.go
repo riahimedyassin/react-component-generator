@@ -42,3 +42,7 @@ func (h *HookWrapper) GetValidators() []generator_interfaces.Validator {
 		newHookValidator(h.execContext, sharedValidator),
 	}
 }
+
+func (h *HookWrapper) GetCleanUpResult(files []generator_interfaces.GenFiles) error {
+	return newHookCleanUp(h.fs).CleanUp(files)
+}

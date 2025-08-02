@@ -8,4 +8,7 @@ type Wrapper interface {
 	// GetEditors will let your get the files that will be edited. The core will be responsible for managing and updating those files.
 	GetEditors() []Editor
 	GetValidators() []Validator
+	// Triggered in case an error happened during processing, this does not include validation.
+	// Validation error will be not trigger any generational processes so no clean ups needed.
+	GetCleanUpResult(files []GenFiles) error
 }

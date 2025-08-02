@@ -8,6 +8,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	"github.com/riahimedyassin/react-component-generator/lib"
+	"github.com/riahimedyassin/react-component-generator/lib/files"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
 	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
@@ -51,8 +52,8 @@ var (
 			execContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flagsOptions)
 
 			// Validate component before generation
-
-			compWrapper := component_generator.NewComponentWrapper(execContext)
+			fs := files.NewFileSystem()
+			compWrapper := component_generator.NewComponentWrapper(execContext, fs)
 			return generator.NewGenerator().Process(compWrapper)
 		},
 	}

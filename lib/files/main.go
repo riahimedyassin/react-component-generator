@@ -38,3 +38,8 @@ func (f *FileSystem) ReadFile(path string) ([]byte, error) {
 	}
 	return content, nil
 }
+
+func (f *FileSystem) DeleteFile(path, name, extension string) error {
+	fullFilePath := fmt.Sprintf("%s/%s.%s", path, name, extension)
+	return os.Remove(fullFilePath)
+}

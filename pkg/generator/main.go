@@ -27,8 +27,10 @@ func NewGenerator() *Generator {
 // Entry point.
 func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
 	errChan := make(chan error, 10) // Buffered channel
 	var pwg sync.WaitGroup
+	doneFiles := lib.NewSafeSlice[generator_interfaces.GenFiles]() // Tracking the generated files to safely cleanup in case of an error.
 
 	if err := g.validate(wrapper); err != nil {
 		return err
@@ -37,7 +39,7 @@ func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 	pwg.Add(2)
 	go func() {
 		defer pwg.Done()
-		if err := g.edit(ctx, errChan, wrapper); err != nil {
+		if err := g.edit(ctx, errChan, *doneFiles, wrapper); err != nil {
 			errChan <- err
 			cancel()
 		}
@@ -45,7 +47,7 @@ func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 
 	go func() {
 		defer pwg.Done()
-		if err := g.generate(ctx, errChan, wrapper); err != nil {
+		if err := g.generate(ctx, errChan, doneFiles, wrapper); err != nil {
 			errChan <- err
 			cancel()
 		}
@@ -55,6 +57,7 @@ func (g *Generator) Process(wrapper generator_interfaces.Wrapper) error {
 	cancel()
 	close(errChan) // Close channel after all goroutines complete
 	if err := <-errChan; err != nil {
+		g.cleanUp(wrapper, doneFiles.GetAll())
 		return err
 	}
 	return nil
@@ -70,7 +73,7 @@ func (g *Generator) validate(wrapper generator_interfaces.Wrapper) error {
 	return nil
 }
 
-func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper generator_interfaces.Wrapper) error {
+func (g *Generator) edit(pctx context.Context, errChan chan error, doneFiles lib.SafeSlice[generator_interfaces.GenFiles], wrapper generator_interfaces.Wrapper) error {
 	editors := wrapper.GetEditors()
 	var wg sync.WaitGroup
 	ctx, cancel := context.WithCancel(pctx)
@@ -92,6 +95,7 @@ func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper gener
 					cancel()
 					return
 				}
+				doneFiles.Append(e)
 			}
 
 		}(editFilesSpecs)
@@ -108,9 +112,9 @@ func (g *Generator) edit(pctx context.Context, errChan chan error, wrapper gener
 	}
 }
 
-func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper generator_interfaces.Wrapper) error {
+func (g *Generator) generate(pctx context.Context, errChan chan error, doneFiles *lib.SafeSlice[generator_interfaces.GenFiles], wrapper generator_interfaces.Wrapper) error {
 	fileSpecDefs := wrapper.GetDefiners()
-	doneFiles := lib.NewSafeSlice[generator_models.FileSpec]() // Tracking the generated files to safely cleanup in case of an error.
+
 	ctx, cancel := context.WithCancel(pctx)
 	defer cancel()
 	var wg sync.WaitGroup
@@ -136,14 +140,13 @@ func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper g
 					cancel()
 					return
 				}
-				doneFiles.Append(fileSpec)
+				doneFiles.Append(&fileSpec)
 			}
 		}(*fileSpec)
 	}
 	wg.Wait()
 	select {
 	case err := <-errChan:
-		g.cleanUp(doneFiles.GetAll())
 		return err
 	case <-ctx.Done():
 		return ctx.Err()
@@ -154,6 +157,6 @@ func (g *Generator) generate(pctx context.Context, errChan chan error, wrapper g
 
 // TODO : Implement
 // in case of an error the function will rollback the created files to keep a clean project structure
-func (g *Generator) cleanUp(files []generator_models.FileSpec) {
-
+func (g *Generator) cleanUp(wrapper generator_interfaces.Wrapper, files []generator_interfaces.GenFiles) error {
+	return wrapper.GetCleanUpResult(files)
 }

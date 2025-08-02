@@ -6,6 +6,7 @@ import (
 	"github.com/riahimedyassin/react-component-generator/config"
 	"github.com/riahimedyassin/react-component-generator/config/enums"
 	"github.com/riahimedyassin/react-component-generator/lib"
+	"github.com/riahimedyassin/react-component-generator/lib/files"
 	"github.com/riahimedyassin/react-component-generator/pkg/generator"
 	component_generator "github.com/riahimedyassin/react-component-generator/pkg/generator/component"
 	generator_models "github.com/riahimedyassin/react-component-generator/pkg/generator/models"
@@ -45,10 +46,9 @@ var (
 			compExecContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *flags)
 			pageExecContext := generator_models.NewExecContenxt(name, path, &config.GlobalConfig, *pageFlags)
 
-			// Validate page before generation
-
-			compWrapper := component_generator.NewComponentWrapper(compExecContext)
-			pageWrapper := page_generator.NewPageWrapper(compWrapper, pageExecContext)
+			fs := files.NewFileSystem()
+			compWrapper := component_generator.NewComponentWrapper(compExecContext, fs)
+			pageWrapper := page_generator.NewPageWrapper(compWrapper, pageExecContext, fs)
 			return generator.NewGenerator().Process(pageWrapper)
 		},
 	}

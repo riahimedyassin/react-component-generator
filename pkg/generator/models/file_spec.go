@@ -20,3 +20,5 @@ func NewFileSpec(
 		Extension: Extension,
 	}
 }
+
+func (f *FileSpec) MarkGenFile() {}
